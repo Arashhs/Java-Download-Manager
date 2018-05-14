@@ -8,8 +8,7 @@ public class Main {
             UIManager.setLookAndFeel(
                     UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
-            // Any handling you want to do here, possibly logging
-            // Optionally, you could just do... nothing.
+
         }
         JDMUI jdm = new JDMUI();
         jdm.setVisible(true);
