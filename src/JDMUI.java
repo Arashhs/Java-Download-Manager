@@ -49,13 +49,15 @@ public class JDMUI {
                 downloadToolbar.addSeparator(new Dimension(20,20));
         //    downloadButtons.get(i).setContentAreaFilled(false);
             downloadButtons.get(i).setFocusPainted(false);
+            downloadButtons.get(i).setBackground(Color.decode("#d0dff8"));
         }
         frame.setMinimumSize(new Dimension(900,400));
         panel1.setLayout(layout1);
         downloadToolbar.add(Box.createHorizontalGlue());
         layout1.putConstraint(SpringLayout.EAST,downloadToolbar,0,SpringLayout.EAST,panel1);
         layout1.putConstraint(SpringLayout.WEST,downloadToolbar,0,SpringLayout.WEST,panel1);
-        panel1.add(downloadToolbar);
+        downloadToolbar.setBackground(Color.decode("#d0dff8"));
+     //   panel1.add(downloadToolbar);
         frame.add(panel1);
         JMenuBar menuBar = new JMenuBar();
         JMenu downloadMenu = new JMenu("Download");
@@ -98,13 +100,24 @@ public class JDMUI {
         JTable downloadTable = new JTable(data,column);
         panel1.add(downloadTable);
         JPanel panel2 = new JPanel(new GridLayout());
+        JPanel panel3 = new JPanel(new FlowLayout());
+        ImageIcon eagleIcon = new ImageIcon(getClass().getResource("logo.png"));
+        JLabel label3 = new JLabel();
+        label3.setIcon(eagleIcon);
         layout1.putConstraint(SpringLayout.NORTH,panel2,0,SpringLayout.SOUTH,downloadToolbar);
         layout1.putConstraint(SpringLayout.SOUTH,panel2,0,SpringLayout.SOUTH,panel1);
         layout1.putConstraint(SpringLayout.EAST,panel2,0,SpringLayout.EAST,panel1);
-        layout1.putConstraint(SpringLayout.WEST,panel2,200,SpringLayout.WEST,panel1);
-
+        layout1.putConstraint(SpringLayout.WEST,panel2,140,SpringLayout.WEST,panel1);
+        layout1.putConstraint(SpringLayout.NORTH,panel3,0,SpringLayout.NORTH,frame);
+        layout1.putConstraint(SpringLayout.WEST,downloadToolbar,0,SpringLayout.WEST,panel2);
+        panel3.setBackground(Color.decode("#32363f"));
+        frame.setBackground(Color.decode("#e7effb"));
+        panel1.add(downloadToolbar);
         panel2.add(downloadTable);
         panel1.add(panel2);
+        panel3.add(label3);
+        layout1.putConstraint(SpringLayout.SOUTH,panel3,0,SpringLayout.SOUTH,panel1);
+        panel1.add(panel3);
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
