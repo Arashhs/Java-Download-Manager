@@ -110,6 +110,8 @@ public class JDMUI {
         layout1.putConstraint(SpringLayout.WEST,panel2,140,SpringLayout.WEST,panel1);
         layout1.putConstraint(SpringLayout.NORTH,panel3,0,SpringLayout.NORTH,frame);
         layout1.putConstraint(SpringLayout.WEST,downloadToolbar,0,SpringLayout.WEST,panel2);
+        //layout1.putConstraint(SpringLayout.EAST,panel3,0,SpringLayout.WEST,downloadToolbar);
+       // layout1.putConstraint(SpringLayout.WEST,panel3,0,SpringLayout.WEST,frame);
         panel3.setBackground(Color.decode("#32363f"));
         panel2.setBackground(Color.decode("#e7effb"));
         panel1.add(downloadToolbar);
@@ -118,6 +120,17 @@ public class JDMUI {
         panel3.add(label3);
         layout1.putConstraint(SpringLayout.SOUTH,panel3,0,SpringLayout.SOUTH,panel1);
         panel1.add(panel3);
+        JTabbedPane tabs = new JTabbedPane(SwingConstants.VERTICAL);
+        panel3.add(tabs);
+        Icon processingIcon = new ImageIcon(getClass().getResource("processing.png"));
+        Icon completedIcon = new ImageIcon(getClass().getResource("completed.png"));
+        Icon queuesIcon = new ImageIcon(getClass().getResource("queue.png"));
+        JButton processingButton = new JButton();
+        JButton completedButton = new JButton();
+        JButton queuesButton = new JButton();
+        downloadToolbar.setFloatable(false);
+        
+
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
