@@ -98,7 +98,7 @@ public class JDMUI {
                 {"101","Sachin","700000"}};
         String column[]={"FileName","FileSize","Progress"};
         JTable downloadTable = new JTable(data,column);
-        panel1.add(downloadTable);
+        //panel1.add(downloadTable);
         JPanel panel2 = new JPanel(new GridLayout());
         JPanel panel3 = new JPanel(new FlowLayout());
         ImageIcon eagleIcon = new ImageIcon(getClass().getResource("logo.png"));
@@ -111,9 +111,9 @@ public class JDMUI {
         layout1.putConstraint(SpringLayout.NORTH,panel3,0,SpringLayout.NORTH,frame);
         layout1.putConstraint(SpringLayout.WEST,downloadToolbar,0,SpringLayout.WEST,panel2);
         panel3.setBackground(Color.decode("#32363f"));
-        frame.setBackground(Color.decode("#e7effb"));
+        panel2.setBackground(Color.decode("#e7effb"));
         panel1.add(downloadToolbar);
-        panel2.add(downloadTable);
+        //panel2.add(downloadTable);
         panel1.add(panel2);
         panel3.add(label3);
         layout1.putConstraint(SpringLayout.SOUTH,panel3,0,SpringLayout.SOUTH,panel1);
