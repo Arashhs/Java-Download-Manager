@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 
@@ -117,6 +118,13 @@ public class JDMUI {
         panel1.add(downloadToolbar);
         //panel2.add(downloadTable);
         panel1.add(panel2);
+/*
+        layout1.putConstraint(SpringLayout.NORTH,label3,0,SpringLayout.NORTH,frame);
+        layout1.putConstraint(SpringLayout.WEST,label3,0,SpringLayout.WEST,frame);
+        layout1.putConstraint(SpringLayout.EAST,label3,0,SpringLayout.WEST,downloadToolbar);
+        */
+
+
         panel3.add(label3);
         layout1.putConstraint(SpringLayout.SOUTH,panel3,0,SpringLayout.SOUTH,panel1);
         panel1.add(panel3);
@@ -129,7 +137,43 @@ public class JDMUI {
         JButton completedButton = new JButton();
         JButton queuesButton = new JButton();
         downloadToolbar.setFloatable(false);
-        
+        JButton[] tabButtons = new JButton[3];
+        tabButtons[0] = processingButton;
+        tabButtons[1] = completedButton;
+        tabButtons[2] = queuesButton;
+        layout1.putConstraint(SpringLayout.NORTH, processingButton, 0, SpringLayout.SOUTH, label3);
+        layout1.putConstraint(SpringLayout.NORTH, completedButton, 0, SpringLayout.SOUTH, processingButton);
+        layout1.putConstraint(SpringLayout.NORTH, queuesButton, 0, SpringLayout.SOUTH, completedButton);
+
+
+        for(int i = 0 ; i < 3 ; i++) {
+            tabButtons[i].setPreferredSize(new Dimension(140, 40));
+        //    layout1.putConstraint(SpringLayout.NORTH, tabButtons[i], 0, SpringLayout.SOUTH, tabButtons[i]);
+            layout1.putConstraint(SpringLayout.WEST, tabButtons[i], 0, SpringLayout.WEST, frame);
+            layout1.putConstraint(SpringLayout.EAST, tabButtons[i], 0, SpringLayout.WEST, downloadToolbar);
+            tabButtons[i].setBackground(Color.decode("#32363f"));
+            if(i==0) {
+                tabButtons[i].setIcon(processingIcon);
+                tabButtons[i].setText("Processing");
+            }
+            else if(i==1){
+                tabButtons[i].setIcon(completedIcon);
+                tabButtons[i].setHorizontalAlignment(SwingConstants.LEFT);
+                tabButtons[i].setText("Completed");
+            }
+            else if(i==2){
+                tabButtons[i].setIcon(queuesIcon);
+                tabButtons[i].setText("      Queue");
+
+            }
+            tabButtons[i].setIconTextGap(30);
+            tabButtons[i].setVerticalTextPosition(SwingConstants.CENTER);
+            tabButtons[i].setHorizontalTextPosition(SwingConstants.RIGHT);
+            tabButtons[i].setBackground(Color.GRAY);
+            panel1.add(tabButtons[i]);
+            tabButtons[i].setVisible(true);
+        }
+
 
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
