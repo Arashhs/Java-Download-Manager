@@ -52,7 +52,7 @@ public class JDMUI {
             downloadButtons.get(i).setFocusPainted(false);
             downloadButtons.get(i).setBackground(Color.decode("#d0dff8"));
         }
-        frame.setMinimumSize(new Dimension(900,400));
+        frame.setPreferredSize(new Dimension(900,400));
         panel1.setLayout(layout1);
         downloadToolbar.add(Box.createHorizontalGlue());
         layout1.putConstraint(SpringLayout.EAST,downloadToolbar,0,SpringLayout.EAST,panel1);
@@ -93,12 +93,7 @@ public class JDMUI {
         menuBar.add(downloadMenu);
         menuBar.add(helpMenu);
         frame.setJMenuBar(menuBar);
-        Download testDownload = new Download("test.exe","250",10);
-        String data[][]={ {"101","Amit","670000"},
-                {"102","Jai","780000"},
-                {"101","Sachin","700000"}};
-        String column[]={"FileName","FileSize","Progress"};
-        JTable downloadTable = new JTable(data,column);
+
         //panel1.add(downloadTable);
         JPanel panel2 = new JPanel(new GridLayout());
         JPanel panel3 = new JPanel(new FlowLayout());
@@ -173,6 +168,17 @@ public class JDMUI {
             panel1.add(tabButtons[i]);
             tabButtons[i].setVisible(true);
         }
+        Download testDownload = new Download("Test.exe",350);
+        DownloadPanel dp = new DownloadPanel(testDownload);
+        BorderLayout borderLayout = new BorderLayout();
+        GridLayout gridLayout = new GridLayout(1,1);
+        JPanel panel4 = new JPanel(borderLayout);
+        JPanel panel5 = new JPanel(gridLayout);
+        JScrollPane scrollPane = new JScrollPane(panel4,   ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        borderLayout.addLayoutComponent(panel5,BorderLayout.NORTH);
+        panel4.add(panel5);
+        panel2.add(scrollPane);
+        panel5.add(dp.getPanel());
 
 
 

@@ -1,18 +1,26 @@
 public class Download {
     private String fileName;
-    private String fileSize;
+    private int fileSize;
+    private int downloadedSize;
     private double progress;
+    private int downloaded;
 
-    public Download(String fileName, String fileSize, double progress) {
+    public Download(String fileName, int fileSize) {
         this.fileName = fileName;
         this.fileSize = fileSize;
-        this.progress = progress;
+        downloadedSize = 0;
+        downloaded = 0;
+        progress = 0;
     }
 
-    public String[] getDownloadInfo(){
-        String[] info = {fileName,fileSize,String.valueOf(progress)};
-        return info;
+    public int getDownloaded() {
+        return downloaded;
     }
+
+    public void setDownloaded(int downloaded) {
+        this.downloaded = downloaded;
+    }
+
     public String getFileName() {
         return fileName;
     }
@@ -21,12 +29,20 @@ public class Download {
         this.fileName = fileName;
     }
 
-    public String getFileSize() {
+    public int getFileSize() {
         return fileSize;
     }
 
-    public void setFileSize(String fileSize) {
+    public void setFileSize(int fileSize) {
         this.fileSize = fileSize;
+    }
+
+    public int getDownloadedSize() {
+        return downloadedSize;
+    }
+
+    public void setDownloadedSize(int downloadedSize) {
+        this.downloadedSize = downloadedSize;
     }
 
     public double getProgress() {
