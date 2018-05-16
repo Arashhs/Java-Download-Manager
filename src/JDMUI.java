@@ -123,8 +123,8 @@ public class JDMUI {
         panel3.add(label3);
         layout1.putConstraint(SpringLayout.SOUTH,panel3,0,SpringLayout.SOUTH,panel1);
         panel1.add(panel3);
-        JTabbedPane tabs = new JTabbedPane(SwingConstants.VERTICAL);
-        panel3.add(tabs);
+       // JTabbedPane tabs = new JTabbedPane(SwingConstants.VERTICAL);
+       // panel3.add(tabs);
         Icon processingIcon = new ImageIcon(getClass().getResource("processing.png"));
         Icon completedIcon = new ImageIcon(getClass().getResource("completed.png"));
         Icon queuesIcon = new ImageIcon(getClass().getResource("queue.png"));
@@ -168,18 +168,21 @@ public class JDMUI {
             panel1.add(tabButtons[i]);
             tabButtons[i].setVisible(true);
         }
-        Download testDownload = new Download("Test.exe",350);
-        DownloadPanel dp = new DownloadPanel(testDownload);
         BorderLayout borderLayout = new BorderLayout();
-        GridLayout gridLayout = new GridLayout(1,1);
+        GridLayout gridLayout = new GridLayout(10,1);
         JPanel panel4 = new JPanel(borderLayout);
         JPanel panel5 = new JPanel(gridLayout);
         JScrollPane scrollPane = new JScrollPane(panel4,   ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        borderLayout.addLayoutComponent(panel5,BorderLayout.NORTH);
+        panel4.add(panel5,BorderLayout.NORTH);
         panel4.add(panel5);
         panel2.add(scrollPane);
-        panel5.add(dp.getPanel());
-
+        Download[] testDownload = new Download[10];
+        DownloadPanel[] dp = new DownloadPanel[10];
+        for(int i = 0 ; i<10 ; i++){
+            testDownload[i] = new Download("Test.exe",40);
+            dp[i] = new DownloadPanel(testDownload[i]);
+            panel5.add(dp[i].getPanel());
+        }
 
 
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
