@@ -15,7 +15,9 @@ public class DownloadPanel {
         JPanel panel2 = new JPanel(new GridLayout(1,2));
         fileName = new JLabel();
         progressBar = new JProgressBar(0,100);
-        progressBar.setValue(20);
+        progressBar.setMinimum(0);
+        progressBar.setMaximum(download.getDownloadedSize());
+        progressBar.setValue(0);
         progress = new JLabel();
         progress.setText(download.getDownloaded()+"MB/"+download.getDownloadedSize()+"MB");
         fileName.setText(download.getFileName());
@@ -28,14 +30,17 @@ public class DownloadPanel {
         speed.setHorizontalAlignment(SwingConstants.CENTER);
         panel2.add(speed);
         panel2.add(progress);
+        panel.setBorder(BorderFactory.createLineBorder(Color.black));
 
 
       //  panel.setPreferredSize(new Dimension(200,50));
-
-
     }
 
     public JPanel getPanel() {
         return panel;
+    }
+
+    public void updateProgressBar(Download d){
+        progressBar.setValue(d.getDownloaded());
     }
 }

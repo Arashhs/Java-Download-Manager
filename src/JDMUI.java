@@ -179,8 +179,11 @@ public class JDMUI {
         Download[] testDownload = new Download[10];
         DownloadPanel[] dp = new DownloadPanel[10];
         for(int i = 0 ; i<10 ; i++){
-            testDownload[i] = new Download("Test.exe",40);
+            testDownload[i] = new Download("Test"+(i+1)+".exe",40);
+            testDownload[i].setDownloadedSize(i+1);
+            testDownload[i].setDownloaded(1);
             dp[i] = new DownloadPanel(testDownload[i]);
+            dp[i].updateProgressBar(testDownload[i]);
             panel5.add(dp[i].getPanel());
         }
 

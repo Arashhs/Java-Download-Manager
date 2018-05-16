@@ -1,16 +1,18 @@
 public class Download {
     private String fileName;
-    private int fileSize;
     private int downloadedSize;
     private double progress;
     private int downloaded;
+    private int downloadStatus; //0: paused | 1: downloading | 2: Completed
+    private int queueStatus; //0: not Queued | 1: Queued
 
     public Download(String fileName, int fileSize) {
         this.fileName = fileName;
-        this.fileSize = fileSize;
         downloadedSize = 0;
         downloaded = 0;
         progress = 0;
+        downloadStatus = 0;
+        queueStatus = 0;
     }
 
     public int getDownloaded() {
@@ -29,14 +31,6 @@ public class Download {
         this.fileName = fileName;
     }
 
-    public int getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(int fileSize) {
-        this.fileSize = fileSize;
-    }
-
     public int getDownloadedSize() {
         return downloadedSize;
     }
@@ -51,5 +45,21 @@ public class Download {
 
     public void setProgress(double progress) {
         this.progress = progress;
+    }
+
+    public int getDownloadStatus() {
+        return downloadStatus;
+    }
+
+    public void setDownloadStatus(int downloadStatus) {
+        this.downloadStatus = downloadStatus;
+    }
+
+    public int getQueueStatus() {
+        return queueStatus;
+    }
+
+    public void setQueueStatus(int queueStatus) {
+        this.queueStatus = queueStatus;
     }
 }
