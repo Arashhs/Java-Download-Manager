@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class DownloadPanel {
     private JPanel panel;
@@ -31,10 +33,12 @@ public class DownloadPanel {
         panel2.add(speed);
         panel2.add(progress);
         panel.setBorder(BorderFactory.createLineBorder(Color.black));
-
-
       //  panel.setPreferredSize(new Dimension(200,50));
+
+
+
     }
+
 
     public JPanel getPanel() {
         return panel;

@@ -12,8 +12,6 @@ public class Main {
         }
         JDMUI jdm = new JDMUI();
         jdm.setVisible(true);
-        SettingsFrame sf = new SettingsFrame();
-        sf.setVisible(true);
 
     }
 

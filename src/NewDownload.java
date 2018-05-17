@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 public class NewDownload extends JDialog {
 
     public NewDownload(){
+        setModalityType(DEFAULT_MODALITY_TYPE);
         setTitle("New Download");
         JPanel panel = new JPanel(new GridLayout(4,1));
         setContentPane(panel);
@@ -37,6 +38,8 @@ public class NewDownload extends JDialog {
         panel.add(panel3);
         panel.add(panel2);
         setSize(500,150);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
 
     }
 }

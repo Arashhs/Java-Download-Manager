@@ -11,6 +11,7 @@ public class SettingsFrame extends JDialog {
     private String downloadDirectory;
 
     public SettingsFrame(){
+        setModalityType(DEFAULT_MODALITY_TYPE);
         downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
         panel = new JPanel(new GridLayout(5,1));
         setContentPane(panel);
@@ -64,11 +65,10 @@ public class SettingsFrame extends JDialog {
         panel4.add(laf2);
         panel4.add(laf3);
         panel.add(panel4);
-
-
-
-
-
+        setTitle("Settings");
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        this.pack();
+        this.setLocationRelativeTo(null);
 
 
     }

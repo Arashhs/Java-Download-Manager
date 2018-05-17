@@ -67,7 +67,7 @@ public class JDMUI {
         JMenuItem resumeDownloadMenu = new JMenuItem("Resume");
         JMenuItem cancelDownloadMenu = new JMenuItem("Cancel");
         JMenuItem removeDownloadMenue = new JMenuItem("Remove");
-        JMenuItem SettingsDownloadMenue = new JMenuItem("Settings");
+        JMenuItem settingsDownloadMenue = new JMenuItem("Settings");
         JMenuItem exitDownloadMenu = new JMenuItem("Exit");
         downloadMenu.add(newDownloadMenu);
         downloadMenu.addSeparator();
@@ -77,7 +77,7 @@ public class JDMUI {
         downloadMenu.addSeparator();
         downloadMenu.add(removeDownloadMenue);
         downloadMenu.addSeparator();
-        downloadMenu.add(SettingsDownloadMenue);
+        downloadMenu.add(settingsDownloadMenue);
         downloadMenu.addSeparator();
         downloadMenu.add(exitDownloadMenu);
         JMenu helpMenu = new JMenu("Help");
@@ -188,7 +188,34 @@ public class JDMUI {
         }
 
 
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        class ButtonListener implements ActionListener{
+            public void actionPerformed(ActionEvent e){
+                if(e.getSource().equals(settingsButton)||e.getSource().equals(settingsDownloadMenue)){
+                    SettingsFrame settingsFrame = new SettingsFrame();
+                    settingsFrame.setVisible(true);
+            }
+            else if(e.getSource().equals(newButton)||e.getSource().equals(newDownloadMenu)){
+                    NewDownload newDownload = new NewDownload();
+                    newDownload.setVisible(true);
+
+                }
+
+        }
+
+
+    }
+
+    ButtonListener buttonListener = new ButtonListener();
+    settingsButton.addActionListener(buttonListener);
+    settingsDownloadMenue.addActionListener(buttonListener);
+    newDownloadMenu.addActionListener(buttonListener);
+    newButton.addActionListener(buttonListener);
+
+    frame.pack();
+    frame.setLocationRelativeTo(null);
+
+
+
 
     }
 
