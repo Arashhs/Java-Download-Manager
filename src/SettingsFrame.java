@@ -8,8 +8,10 @@ import java.text.NumberFormat;
 
 public class SettingsFrame extends JDialog {
     private JPanel panel;
+    private String downloadDirectory;
 
     public SettingsFrame(){
+        downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
         panel = new JPanel(new GridLayout(4,1));
         setContentPane(panel);
         JPanel panel2 = new JPanel(new FlowLayout());
@@ -23,16 +25,21 @@ public class SettingsFrame extends JDialog {
         panel.add(panel2);
         setSize(500,300);
         JLabel label2 = new JLabel("Download directory folder:");
-        JButton button = new JButton("Select File");
+        JTextField textField = new JTextField();
+        textField.setText(downloadDirectory);
+        JButton button = new JButton("Select directory");
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") +  "/Desktop"));
-                int result = fileChooser.showOpenDialog(SettingsFrame.this);
-                if (result == JFileChooser.APPROVE_OPTION) {
-                    File selectedFile = fileChooser.getSelectedFile();
-                    System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") +  "\\Desktop"));
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                fileChooser.setAcceptAllFileFilterUsed(false);
+                fileChooser.setDialogTitle("Select directory");
+
+                if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
+                    downloadDirectory = fileChooser.getSelectedFile().getAbsolutePath();
+                    textField.setText(downloadDirectory);
                 }
             }
         });
@@ -40,6 +47,8 @@ public class SettingsFrame extends JDialog {
         panel3.add(label2);
         panel3.add(button);
         panel.add(panel3);
+        textField.setEditable(false);
+        panel.add(textField);
 
 
     }
