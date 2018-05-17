@@ -59,6 +59,10 @@ public class DownloadPanel {
                     }
                     isHighlighted = !isHighlighted;
                 }
+                else if(SwingUtilities.isRightMouseButton(e)){
+                    DownloadInfo info = new DownloadInfo(download);
+                    info.setVisible(true);
+                }
             }
 
             @Override

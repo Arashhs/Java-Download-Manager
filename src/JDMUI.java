@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
@@ -95,6 +92,21 @@ public class JDMUI {
         menuBar.add(downloadMenu);
         menuBar.add(helpMenu);
         frame.setJMenuBar(menuBar);
+        helpMenu.setMnemonic('2');
+        aboutMenuItem.setMnemonic(KeyEvent.VK_A);
+        KeyStroke ctrlXKeyStroke = KeyStroke.getKeyStroke("control A");
+        aboutMenuItem.setAccelerator(ctrlXKeyStroke);
+        downloadMenu.setMnemonic('1');
+        KeyStroke ctrlSKeyStroke = KeyStroke.getKeyStroke("control S");
+        settingsDownloadMenue.setAccelerator(ctrlSKeyStroke);
+        settingsDownloadMenue.setMnemonic('s');
+        KeyStroke ctrlQKeyStroke = KeyStroke.getKeyStroke("control Q");
+        exitDownloadMenu.setAccelerator(ctrlQKeyStroke);
+        exitDownloadMenu.setMnemonic('q');
+        KeyStroke ctrlDKeyStroke = KeyStroke.getKeyStroke("control D");
+        newDownloadMenu.setAccelerator(ctrlDKeyStroke);
+        newDownloadMenu.setMnemonic('d');
+
 
         //panel1.add(downloadTable);
         JPanel panel2 = new JPanel(new GridLayout());
