@@ -9,6 +9,7 @@ public class AboutWindow {
     public AboutWindow(){
         frame = new JDialog();
         frame.setModalityType(DEFAULT_MODALITY_TYPE);
+        frame.setTitle("About Me");
         String txt = "Java Download Manager version 1.00";
         JLabel label = new JLabel(txt);
         label.setFont(new Font("Roman",Font.BOLD,24));

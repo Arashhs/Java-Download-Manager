@@ -11,7 +11,7 @@ import static javax.swing.SwingUtilities.updateComponentTreeUI;
 public class JDMUI {
     private JFrame frame;
 
-    public JDMUI() {
+    public JDMUI() throws AWTException {
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
 
@@ -201,6 +201,35 @@ public class JDMUI {
             panel5.add(dp[i].getPanel());
         }
 
+        Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png"));
+        frame.setIconImage(img);
+        PopupMenu popMenu= new PopupMenu();
+        MenuItem item1 = new MenuItem("Exit");
+        popMenu.add(item1);
+        TrayIcon trayIcon = new TrayIcon(img, "JDM", popMenu);
+        try{SystemTray.getSystemTray().add(trayIcon);
+            trayIcon.setImageAutoSize(true);
+            trayIcon.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent evt) {
+                    if (evt.getClickCount() == 2) {
+                        setVisible(true);
+                        frame.setExtendedState(JFrame.NORMAL);
+                    }
+                }
+
+            });
+        }
+        catch (Exception e){
+
+            System.err.print("Exception");
+        }
+
+
+
+
+
 
         class ButtonListener implements ActionListener{
             public void actionPerformed(ActionEvent e){
@@ -213,7 +242,7 @@ public class JDMUI {
                     newDownload.setVisible(true);
 
                 }
-                else if(e.getSource().equals(exitDownloadMenu))
+                else if(e.getSource().equals(exitDownloadMenu)||e.getSource().equals(item1))
                     System.exit(0);
 
         }
@@ -227,6 +256,7 @@ public class JDMUI {
     newDownloadMenu.addActionListener(buttonListener);
     newButton.addActionListener(buttonListener);
     exitDownloadMenu.addActionListener(buttonListener);
+    item1.addActionListener(buttonListener);
 
     frame.pack();
     frame.setLocationRelativeTo(null);
