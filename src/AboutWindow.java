@@ -22,6 +22,8 @@ public class AboutWindow {
         panel.add(textArea);
         frame.add(panel);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
 
     }
 

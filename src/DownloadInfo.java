@@ -7,7 +7,7 @@ public class DownloadInfo extends JDialog {
         setTitle(download.getFileName() + " Info");
         this.setModalityType(DEFAULT_MODALITY_TYPE);
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        JPanel panel = new JPanel(new GridLayout(5, 1));
+        JPanel panel = new JPanel(new GridLayout(6, 1));
         setContentPane(panel);
         JLabel fileName1, fileName2;
         fileName1 = new JLabel("    File: ");
@@ -53,9 +53,18 @@ public class DownloadInfo extends JDialog {
         panel5.setBorder(BorderFactory.createLineBorder(Color.black));
         panel.add(panel5);
         panel.setBorder(BorderFactory.createLineBorder(Color.black));
+        JPanel panel6 = new JPanel(new GridLayout(1,2));
+        JLabel date1,date2;
+        date1 = new JLabel("    Started Date: ");
+        date2 = new JLabel();
+        date2.setText(download.getStartDate().toString());
+        panel6.add(date1);
+        panel6.add(date2);
+        panel6.setBorder(BorderFactory.createLineBorder(Color.black));
+        panel.add(panel6);
         setSize(270,350);
         this.setLocationRelativeTo(null);
-        //this.pack();
+
 
 
     }

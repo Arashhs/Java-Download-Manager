@@ -1,10 +1,13 @@
 public class Download {
+    private String URL;
     private String fileName;
     private int downloadedSize;
     private double progress;
     private int downloaded;
     private int downloadStatus; //0: paused | 1: downloading | 2: Completed
     private int queueStatus; //0: not Queued | 1: Queued
+    private boolean isSelected;
+    private Date startDate;
 
     public Download(String fileName, int fileSize) {
         this.fileName = fileName;
@@ -13,6 +16,9 @@ public class Download {
         progress = 0;
         downloadStatus = 0;
         queueStatus = 0;
+        URL = "";
+        isSelected = false;
+        startDate = new Date();
     }
 
     public int getDownloaded() {
@@ -61,5 +67,29 @@ public class Download {
 
     public void setQueueStatus(int queueStatus) {
         this.queueStatus = queueStatus;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

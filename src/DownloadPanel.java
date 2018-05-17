@@ -49,15 +49,16 @@ public class DownloadPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(isHighlighted) {
-                    panel.setBorder(blackBorder);
-                    download.setSelected(false);
+                if (SwingUtilities.isLeftMouseButton(e)) {
+                    if (isHighlighted) {
+                        panel.setBorder(blackBorder);
+                        download.setSelected(false);
+                    } else {
+                        panel.setBorder(redBorder);
+                        download.setSelected(true);
+                    }
+                    isHighlighted = !isHighlighted;
                 }
-                else{
-                    panel.setBorder(redBorder);
-                    download.setSelected(true);
-                }
-                isHighlighted=!isHighlighted;
             }
 
             @Override

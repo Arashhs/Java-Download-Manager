@@ -29,6 +29,7 @@ public class NewDownload extends JDialog {
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(button1);
         buttonGroup.add(button2);
+        button1.setSelected(true);
         panel2.add(button3);
         panel2.add(button4);
         panel.add(tf);

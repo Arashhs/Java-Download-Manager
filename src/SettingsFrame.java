@@ -8,7 +8,7 @@ import java.text.NumberFormat;
 
 public class SettingsFrame extends JDialog {
     private JPanel panel;
-    private String downloadDirectory;
+    private static String downloadDirectory;
 
     public SettingsFrame(){
         setModalityType(DEFAULT_MODALITY_TYPE);
@@ -60,6 +60,7 @@ public class SettingsFrame extends JDialog {
         buttonGroup.add(laf1);
         buttonGroup.add(laf2);
         buttonGroup.add(laf3);
+        laf1.setSelected(true);
         panel4.add(label3);
         panel4.add(laf1);
         panel4.add(laf2);
@@ -73,4 +74,7 @@ public class SettingsFrame extends JDialog {
 
     }
 
+    public static String getDownloadDirectory() {
+        return downloadDirectory;
+    }
 }
