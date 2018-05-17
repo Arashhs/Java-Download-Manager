@@ -38,6 +38,32 @@ public class DownloadPanel {
         panel2.add(progress);
         panel.setBorder(BorderFactory.createLineBorder(Color.black));
       //  panel.setPreferredSize(new Dimension(200,50));
+        JPopupMenu popMenu= new JPopupMenu();
+        JMenuItem item1 = new JMenuItem("Add to queue");
+        JMenuItem item2 = new JMenuItem("Info");
+        item1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        item2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        popMenu.add(item1);
+        popMenu.add(item2);
+        panel.setComponentPopupMenu(popMenu);
+
+        class PopUpMenueListener implements ActionListener{
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(e.getSource().equals(item1)){
+                    //add to queue
+                }
+                else if(e.getSource().equals(item2)){
+                    DownloadInfo info = new DownloadInfo(download);
+                    info.setVisible(true);
+                }
+            }
+        }
+        PopUpMenueListener popUpMenueListener = new PopUpMenueListener();
+        item1.addActionListener(popUpMenueListener);
+        item2.addActionListener(popUpMenueListener);
+
 
 
 
@@ -60,8 +86,9 @@ public class DownloadPanel {
                     isHighlighted = !isHighlighted;
                 }
                 else if(SwingUtilities.isRightMouseButton(e)){
+                    /*
                     DownloadInfo info = new DownloadInfo(download);
-                    info.setVisible(true);
+                    info.setVisible(true); */
                 }
             }
 
