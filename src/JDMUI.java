@@ -10,11 +10,15 @@ import static javax.swing.SwingUtilities.updateComponentTreeUI;
 
 public class JDMUI {
     private JFrame frame;
+    private static JPanel panel5;
+    private static ArrayList<Download> downloads;
+    private static ArrayList<Download> queuedDownloads;
 
     public JDMUI() throws AWTException {
+        downloads = new ArrayList<Download>();
+        queuedDownloads = new ArrayList<Download>();
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
-
         SpringLayout layout1 = new SpringLayout();
         Icon newIcon = new ImageIcon(getClass().getResource("new.png"));
         Icon pauseIcon = new ImageIcon(getClass().getResource("pause.png"));
@@ -185,7 +189,7 @@ public class JDMUI {
         BorderLayout borderLayout = new BorderLayout();
         GridLayout gridLayout = new GridLayout(10,1);
         JPanel panel4 = new JPanel(borderLayout);
-        JPanel panel5 = new JPanel(gridLayout);
+        panel5 = new JPanel(gridLayout);
         JScrollPane scrollPane = new JScrollPane(panel4,   ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         panel4.add(panel5,BorderLayout.NORTH);
         panel4.add(panel5);
@@ -244,7 +248,6 @@ public class JDMUI {
                 }
                 else if(e.getSource().equals(exitDownloadMenu)||e.getSource().equals(item1))
                     System.exit(0);
-
         }
 
 
@@ -270,6 +273,16 @@ public class JDMUI {
             frame.setVisible(true);
         } else
             frame.setVisible(false);
+    }
+
+    public static void addDownload(Download download){
+        downloads.add(download);
+        DownloadPanel panel = new DownloadPanel(download);
+        GridLayout layout = (GridLayout) panel5.getLayout();
+        layout.setRows(layout.getRows()+1);
+        panel5.add(panel.getPanel());
+
+
     }
 
 

@@ -16,6 +16,14 @@ public class NewDownload extends JDialog {
         JRadioButton button1 = new JRadioButton("Now");
         JRadioButton button2 = new JRadioButton("Queues");
         JButton button3 = new JButton("OK");
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Download download = new Download(tf.getText());
+                JDMUI.addDownload(download);
+                dispose();
+            }
+        });
         JButton button4 = new JButton("Cancel");
         button4.addActionListener(new ActionListener() {
             @Override
