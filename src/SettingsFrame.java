@@ -12,7 +12,7 @@ public class SettingsFrame extends JDialog {
 
     public SettingsFrame(){
         downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
-        panel = new JPanel(new GridLayout(4,1));
+        panel = new JPanel(new GridLayout(5,1));
         setContentPane(panel);
         JPanel panel2 = new JPanel(new FlowLayout());
         JLabel label1 = new JLabel("Maximum number of downloading files at the same time: (Set 0 for unlimited) ");
@@ -49,6 +49,26 @@ public class SettingsFrame extends JDialog {
         panel.add(panel3);
         textField.setEditable(false);
         panel.add(textField);
+        textField.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel label3 = new JLabel("Select Skin: ");
+        JPanel panel4 = new JPanel(new FlowLayout());
+        JRadioButton laf1 = new JRadioButton("Default");
+        JRadioButton laf2 = new JRadioButton("Metal");
+        JRadioButton laf3 = new JRadioButton("Nimbus");
+        ButtonGroup buttonGroup = new ButtonGroup();
+        buttonGroup.add(laf1);
+        buttonGroup.add(laf2);
+        buttonGroup.add(laf3);
+        panel4.add(label3);
+        panel4.add(laf1);
+        panel4.add(laf2);
+        panel4.add(laf3);
+        panel.add(panel4);
+
+
+
+
+
 
 
     }
