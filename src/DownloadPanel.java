@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class DownloadPanel {
     private JPanel panel;
@@ -9,6 +12,7 @@ public class DownloadPanel {
     private JProgressBar progressBar;
     private JLabel progress;
     private JLabel speed;
+
 
     public DownloadPanel(Download download) {
         speed = new JLabel("0Mb/s");
@@ -34,6 +38,51 @@ public class DownloadPanel {
         panel2.add(progress);
         panel.setBorder(BorderFactory.createLineBorder(Color.black));
       //  panel.setPreferredSize(new Dimension(200,50));
+
+
+
+        class Listener implements MouseListener{
+
+            Border redBorder = BorderFactory.createLineBorder(Color.RED,5);
+            Border blackBorder = BorderFactory.createLineBorder(Color.BLACK);
+            boolean isHighlighted;
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(isHighlighted) {
+                    panel.setBorder(blackBorder);
+                    download.setSelected(false);
+                }
+                else{
+                    panel.setBorder(redBorder);
+                    download.setSelected(true);
+                }
+                isHighlighted=!isHighlighted;
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        }
+
+        Listener listener = new Listener();
+        panel.addMouseListener(listener);
 
 
 
