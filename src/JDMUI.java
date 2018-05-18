@@ -9,7 +9,7 @@ import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 
 public class JDMUI {
-    private JFrame frame;
+    private static JFrame frame;
     private static JPanel panel5;
     private static ArrayList<Download> downloads;
     private static ArrayList<Download> queuedDownloads;
@@ -196,14 +196,14 @@ public class JDMUI {
         panel2.add(scrollPane);
         Download[] testDownload = new Download[10];
         DownloadPanel[] dp = new DownloadPanel[10];
-        for(int i = 0 ; i<10 ; i++){
+     /*   for(int i = 0 ; i<10 ; i++){
             testDownload[i] = new Download("Test"+(i+1)+".exe",40);
             testDownload[i].setDownloadedSize(i+1);
             testDownload[i].setDownloaded(1);
             dp[i] = new DownloadPanel(testDownload[i]);
             dp[i].updateProgressBar(testDownload[i]);
             panel5.add(dp[i].getPanel());
-        }
+        } */
 
         Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png"));
         frame.setIconImage(img);
@@ -277,12 +277,30 @@ public class JDMUI {
 
     public static void addDownload(Download download){
         downloads.add(download);
-        DownloadPanel panel = new DownloadPanel(download);
+     //   DownloadPanel panel = new DownloadPanel(download);
+     //   GridLayout layout = (GridLayout) panel5.getLayout();
+     //   layout.setRows(layout.getRows()+1);
+    //    panel5.add(panel.getPanel());
+    }
+
+    public static void addQueued(Download download){
+        downloads.add(download);
+        queuedDownloads.add(download);
+    /**    DownloadPanel panel = new DownloadPanel(download);
         GridLayout layout = (GridLayout) panel5.getLayout();
         layout.setRows(layout.getRows()+1);
-        panel5.add(panel.getPanel());
+        panel5.add(panel.getPanel()); */
+    }
 
-
+    public static void showDownloadList(){
+        panel5.removeAll();
+        ((GridLayout) panel5.getLayout()).setRows(downloads.size());
+        for(int i = downloads.size()-1 ; i>= 0 ; i--){
+            DownloadPanel panel = new DownloadPanel(downloads.get(i));
+            panel5.add(panel.getPanel());
+        }
+        frame.revalidate();
+        frame.repaint();
     }
 
 

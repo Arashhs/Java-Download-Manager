@@ -16,14 +16,7 @@ public class NewDownload extends JDialog {
         JRadioButton button1 = new JRadioButton("Now");
         JRadioButton button2 = new JRadioButton("Queues");
         JButton button3 = new JButton("OK");
-        button3.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Download download = new Download(tf.getText());
-                JDMUI.addDownload(download);
-                dispose();
-            }
-        });
+
         JButton button4 = new JButton("Cancel");
         button4.addActionListener(new ActionListener() {
             @Override
@@ -38,6 +31,23 @@ public class NewDownload extends JDialog {
         buttonGroup.add(button1);
         buttonGroup.add(button2);
         button1.setSelected(true);
+        button3.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(button1.isSelected()){
+                    Download download = new Download(tf.getText());
+                    JDMUI.addDownload(download);
+                    JDMUI.showDownloadList();
+                    dispose();
+                }
+                else if(button2.isSelected()){
+                    Download download = new Download(tf.getText());
+                    JDMUI.addQueued(download);
+                    JDMUI.showDownloadList();
+                    dispose();
+                }
+            }
+        });
         panel2.add(button3);
         panel2.add(button4);
         panel.add(tf);
