@@ -3,14 +3,16 @@ import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
+import java.io.*;
 import java.text.NumberFormat;
 
 public class SettingsFrame extends JDialog {
     private JPanel panel;
     private static String downloadDirectory;
+    private int lookAndFeel;
 
-    public SettingsFrame(){
+    public SettingsFrame() throws IOException {
+        lookAndFeel = 0;
         setModalityType(DEFAULT_MODALITY_TYPE);
         downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
         panel = new JPanel(new GridLayout(5,1));
@@ -51,20 +53,65 @@ public class SettingsFrame extends JDialog {
         textField.setEditable(false);
         panel.add(textField);
         textField.setHorizontalAlignment(SwingConstants.CENTER);
-        JLabel label3 = new JLabel("Select Skin: ");
+        JLabel label3 = new JLabel("Select Skin: (Restart the app to apply) ");
         JPanel panel4 = new JPanel(new FlowLayout());
         JRadioButton laf1 = new JRadioButton("Default");
-        JRadioButton laf2 = new JRadioButton("Metal");
+        JRadioButton laf2 = new JRadioButton("Motif");
         JRadioButton laf3 = new JRadioButton("Nimbus");
         ButtonGroup buttonGroup = new ButtonGroup();
         buttonGroup.add(laf1);
         buttonGroup.add(laf2);
         buttonGroup.add(laf3);
-        laf1.setSelected(true);
         panel4.add(label3);
         panel4.add(laf1);
         panel4.add(laf2);
         panel4.add(laf3);
+
+        class Listener implements ActionListener {
+            PrintWriter writer = new PrintWriter("LAF.jdm");
+            Listener() throws IOException {
+
+            }
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource().equals(laf1)) {
+                    try {
+                      /*  UIManager.setLookAndFeel(
+                                UIManager.getSystemLookAndFeelClassName()); */
+                      lookAndFeel = 0;
+                    } catch (Exception a) {
+
+                    }
+                }
+                else if(e.getSource().equals(laf2)){
+                    try {
+                    /*    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                        UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel"); */
+                    lookAndFeel = 1;
+                    } catch (Exception a) {
+
+                    }
+
+                }
+                else if(e.getSource().equals(laf3)){
+                    try {
+                    /*    UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                        UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel"); */
+                    lookAndFeel = 2;
+                    } catch (Exception a) {
+
+                    }
+
+                }
+                writer.print(lookAndFeel);
+                writer.close();
+            }
+        }
+        Listener listener = new Listener();
+        laf1.addActionListener(listener);
+        laf2.addActionListener(listener);
+        laf3.addActionListener(listener);
         panel.add(panel4);
         setTitle("Settings");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

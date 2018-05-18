@@ -1,17 +1,36 @@
 import javax.swing.*;
+import java.io.*;
 
 public class Main {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
+        int laf = 0;
         try {
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
+            BufferedReader br = new BufferedReader(new FileReader("LAF.jdm"));
+            laf = Integer.parseInt(br.readLine());
+
+        }
+        catch (Exception e){
+            laf = 1;
+        }
+        System.out.println(laf);
+        try {
+            if(laf == 0) {
+                UIManager.setLookAndFeel(
+                        UIManager.getSystemLookAndFeelClassName());
+            }
+            else if(laf == 1){
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+            }
+            else if(laf == 2){
+                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+            }
         } catch (Exception e) {
 
         }
-        SettingsFrame settingsFrame = new SettingsFrame();
-        settingsFrame.setVisible(false);
         JDMUI jdm;
         try{jdm = new JDMUI();
             jdm.setVisible(true);
@@ -19,9 +38,6 @@ public class Main {
         catch (Exception e){
             System.err.print("Exception");
         }
-        Download download = new Download("Java.exe",40);
-        download.setURL("www.java.com/java.exe");
-        download.setDownloadStatus(1);
 
 
     }

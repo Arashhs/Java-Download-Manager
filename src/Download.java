@@ -33,6 +33,13 @@ public class Download {
         startDate = new Date();
     }
 
+    public boolean equals(Object o){
+                Download other = (Download) o;
+                if(this.URL.equals(other.URL) && this.fileName.equals(other.fileName))
+                    return true;
+                return false;
+    }
+
     public int getDownloaded() {
         return downloaded;
     }

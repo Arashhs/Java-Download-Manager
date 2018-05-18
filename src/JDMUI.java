@@ -2,6 +2,8 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -240,7 +242,14 @@ public class JDMUI {
         class ButtonListener implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 if(e.getSource().equals(settingsButton)||e.getSource().equals(settingsDownloadMenue)){
-                    SettingsFrame settingsFrame = new SettingsFrame();
+                    SettingsFrame settingsFrame = null;
+                    try {
+                        settingsFrame = new SettingsFrame();
+                    } catch (FileNotFoundException e1) {
+                        e1.printStackTrace();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                     settingsFrame.setVisible(true);
             }
             else if(e.getSource().equals(newButton)||e.getSource().equals(newDownloadMenu)){
