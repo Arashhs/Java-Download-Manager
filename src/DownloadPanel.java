@@ -49,7 +49,9 @@ public class DownloadPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(e.getSource().equals(item1)){
-                    //add to queue
+                    if(!JDMUI.getQueuedDownloads().contains(download)){
+                        JDMUI.addAlreadyDownloadingToQueue(download);
+                    }
                 }
                 else if(e.getSource().equals(item2)){
                     DownloadInfo info = new DownloadInfo(download);

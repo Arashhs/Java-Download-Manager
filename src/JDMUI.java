@@ -250,8 +250,6 @@ public class JDMUI {
                 else if(e.getSource().equals(exitDownloadMenu)||e.getSource().equals(item1))
                     System.exit(0);
         }
-
-
     }
 
         JButton startQueue = new JButton("Start");
@@ -277,7 +275,18 @@ public class JDMUI {
                         Collections.swap(queuedDownloads,i,i+1);
                     }
                 }
+                JDMUI.showQueueList();
+            }
+        });
 
+        down.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = 0 ; i < queuedDownloads.size() ; i++){
+                    if(queuedDownloads.get(i).isSelected() && i>0){
+                        Collections.swap(queuedDownloads,i,i-1);
+                    }
+                }
                 JDMUI.showQueueList();
             }
         });
@@ -328,6 +337,10 @@ public class JDMUI {
         panel5.add(panel.getPanel()); */
     }
 
+    public static void addAlreadyDownloadingToQueue(Download download){
+        queuedDownloads.add(download);
+    }
+
     public static void showDownloadList(){
         panel5.removeAll();
         ((GridLayout) panel5.getLayout()).setRows(downloads.size());
@@ -343,14 +356,6 @@ public class JDMUI {
         panel5.removeAll();
         if(queuedDownloads.size()>=1)
             panel6.setVisible(true);
-          /*  JButton startQueue = new JButton("Start");
-            JButton stopQueue = new JButton("Pause");
-            JPanel panel6 = new JPanel(new GridLayout(1, 2));
-            JButton up = new JButton();
-            JButton down = new JButton();
-            ImageIcon upIcon = new ImageIcon()
-            panel6.add(startQueue);
-            panel6.add(stopQueue); */
             ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size() + 1);
             panel5.add(panel6);
             for (int i = queuedDownloads.size() - 1; i >= 0; i--) {
@@ -361,9 +366,9 @@ public class JDMUI {
             }
             frame.revalidate();
             frame.repaint();
-
-
     }
 
-
+    public static ArrayList<Download> getQueuedDownloads() {
+        return queuedDownloads;
+    }
 }
