@@ -3,6 +3,7 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
@@ -13,6 +14,7 @@ public class JDMUI {
     private static JPanel panel5;
     private static ArrayList<Download> downloads;
     private static ArrayList<Download> queuedDownloads;
+    private static JPanel panel6;
 
     public JDMUI() throws AWTException {
         downloads = new ArrayList<Download>();
@@ -202,16 +204,7 @@ public class JDMUI {
         panel4.add(panel5,BorderLayout.NORTH);
         panel4.add(panel5);
         panel2.add(scrollPane);
-        Download[] testDownload = new Download[10];
-        DownloadPanel[] dp = new DownloadPanel[10];
-     /*   for(int i = 0 ; i<10 ; i++){
-            testDownload[i] = new Download("Test"+(i+1)+".exe",40);
-            testDownload[i].setDownloadedSize(i+1);
-            testDownload[i].setDownloaded(1);
-            dp[i] = new DownloadPanel(testDownload[i]);
-            dp[i].updateProgressBar(testDownload[i]);
-            panel5.add(dp[i].getPanel());
-        } */
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
         Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png"));
         frame.setIconImage(img);
@@ -261,7 +254,35 @@ public class JDMUI {
 
     }
 
-    ButtonListener buttonListener = new ButtonListener();
+        JButton startQueue = new JButton("Start");
+        JButton stopQueue = new JButton("Pause");
+        panel6 = new JPanel(new GridLayout(1, 4));
+        JButton up = new JButton();
+        JButton down = new JButton();
+        ImageIcon upIcon = new ImageIcon(getClass().getResource("up.png"));
+        ImageIcon downIcon = new ImageIcon(getClass().getResource("down.png"));
+        up.setIcon(upIcon);
+        down.setIcon(downIcon);
+        panel6.add(startQueue);
+        panel6.add(stopQueue);
+        panel6.add(up);
+        panel6.add(down);
+        panel6.setVisible(false);
+
+        up.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = queuedDownloads.size()-1 ; i >= 0 ; i--){
+                    if(queuedDownloads.get(i).isSelected() && i<queuedDownloads.size()-1){
+                        Collections.swap(queuedDownloads,i,i+1);
+                    }
+                }
+
+                JDMUI.showQueueList();
+            }
+        });
+
+        ButtonListener buttonListener = new ButtonListener();
     settingsButton.addActionListener(buttonListener);
     settingsDownloadMenue.addActionListener(buttonListener);
     newDownloadMenu.addActionListener(buttonListener);
@@ -320,13 +341,28 @@ public class JDMUI {
 
     public static void showQueueList(){
         panel5.removeAll();
-        ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size());
-        for(int i = queuedDownloads.size()-1 ; i>= 0 ; i--){
-            DownloadPanel panel = new DownloadPanel(queuedDownloads.get(i));
-            panel5.add(panel.getPanel());
-        }
-        frame.revalidate();
-        frame.repaint();
+        if(queuedDownloads.size()>=1)
+            panel6.setVisible(true);
+          /*  JButton startQueue = new JButton("Start");
+            JButton stopQueue = new JButton("Pause");
+            JPanel panel6 = new JPanel(new GridLayout(1, 2));
+            JButton up = new JButton();
+            JButton down = new JButton();
+            ImageIcon upIcon = new ImageIcon()
+            panel6.add(startQueue);
+            panel6.add(stopQueue); */
+            ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size() + 1);
+            panel5.add(panel6);
+            for (int i = queuedDownloads.size() - 1; i >= 0; i--) {
+                DownloadPanel panel = new DownloadPanel(queuedDownloads.get(i));
+                panel5.add(panel.getPanel());
+                if(queuedDownloads.get(i).isSelected())
+                    panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
+            }
+            frame.revalidate();
+            frame.repaint();
+
+
     }
 
 

@@ -22,9 +22,9 @@ public class Download {
     }
 
     public Download(String URL){
-        this.fileName = "";
-        downloadedSize = 0;
-        downloaded = 0;
+        this.fileName = URL;
+        downloadedSize = 10;
+        downloaded = 2;
         progress = 0;
         downloadStatus = 0;
         queueStatus = false;

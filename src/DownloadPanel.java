@@ -1,10 +1,7 @@
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 
 public class DownloadPanel {
     private JPanel panel;
@@ -23,7 +20,7 @@ public class DownloadPanel {
         progressBar = new JProgressBar(0,100);
         progressBar.setMinimum(0);
         progressBar.setMaximum(download.getDownloadedSize());
-        progressBar.setValue(0);
+        progressBar.setValue(download.getDownloaded());
         progress = new JLabel();
         progress.setText(download.getDownloaded()+"MB/"+download.getDownloadedSize()+"MB");
         fileName.setText(download.getFileName());
@@ -36,13 +33,13 @@ public class DownloadPanel {
         speed.setHorizontalAlignment(SwingConstants.CENTER);
         panel2.add(speed);
         panel2.add(progress);
-        panel.setBorder(BorderFactory.createLineBorder(Color.black));
+        panel.setBorder(BorderFactory.createLineBorder(Color.black,2));
       //  panel.setPreferredSize(new Dimension(200,50));
         JPopupMenu popMenu= new JPopupMenu();
         JMenuItem item1 = new JMenuItem("Add to queue");
         JMenuItem item2 = new JMenuItem("Info");
-        item1.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        item2.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        item1.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
+        item2.setBorder(BorderFactory.createLineBorder(Color.BLACK,2));
         popMenu.add(item1);
         popMenu.add(item2);
         panel.setComponentPopupMenu(popMenu);
@@ -69,8 +66,8 @@ public class DownloadPanel {
 
         class Listener implements MouseListener{
 
-            Border redBorder = BorderFactory.createLineBorder(Color.RED,5);
-            Border blackBorder = BorderFactory.createLineBorder(Color.BLACK);
+            Border redBorder = BorderFactory.createLineBorder(Color.RED,2);
+            Border blackBorder = BorderFactory.createLineBorder(Color.BLACK,2);
             boolean isHighlighted;
 
             @Override
