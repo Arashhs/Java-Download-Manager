@@ -21,12 +21,12 @@ public class Main {
                         UIManager.getSystemLookAndFeelClassName());
             }
             else if(laf == 1){
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
+             //   UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel("com.sun.java.swing.plaf.motfi.MotfiLookAndFeel");
             }
             else if(laf == 2){
-                UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
-                UIManager.setLookAndFeel("com.sun.java.swing.plaf.motif.MotifLookAndFeel");
+             //   UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+                UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             }
         } catch (Exception e) {
 
