@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
@@ -249,12 +250,36 @@ public class JDMUI {
                 }
                 else if(e.getSource().equals(exitDownloadMenu)||e.getSource().equals(item1))
                     System.exit(0);
+
+                else if(e.getSource().equals(removeButton)||e.getSource().equals(resumeDownloadMenu)){
+                    int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected tasks?", "Remove", JOptionPane.YES_NO_OPTION);
+                    if (reply == JOptionPane.YES_OPTION) {
+                            Iterator<Download> it = downloads.iterator();
+                            Iterator<Download> it2 = queuedDownloads.iterator();
+                            while (it.hasNext()) {
+                                if (it.next().isSelected()) {
+                                    it.remove();
+                                }
+                            }
+                        while (it2.hasNext()) {
+                            if (it2.next().isSelected()) {
+                                it2.remove();
+                            }
+                        }
+                            showDownloadList();
+                    }
+                    else {
+
+                    }
+                }
         }
+
     }
 
         JButton startQueue = new JButton("Start");
         JButton stopQueue = new JButton("Pause");
-        panel6 = new JPanel(new GridLayout(1, 4));
+        JButton removeFromQueue = new JButton("Remove queue");
+        panel6 = new JPanel(new GridLayout(1, 5));
         JButton up = new JButton();
         JButton down = new JButton();
         ImageIcon upIcon = new ImageIcon(getClass().getResource("up.png"));
@@ -263,6 +288,7 @@ public class JDMUI {
         down.setIcon(downIcon);
         panel6.add(startQueue);
         panel6.add(stopQueue);
+        panel6.add(removeFromQueue);
         panel6.add(up);
         panel6.add(down);
         panel6.setVisible(false);
@@ -291,6 +317,19 @@ public class JDMUI {
             }
         });
 
+        removeFromQueue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Iterator<Download> it = queuedDownloads.iterator();
+                while (it.hasNext()) {
+                    if (it.next().isSelected()) {
+                        it.remove();
+                    }
+                }
+                showQueueList();
+            }
+        });
+
         ButtonListener buttonListener = new ButtonListener();
     settingsButton.addActionListener(buttonListener);
     settingsDownloadMenue.addActionListener(buttonListener);
@@ -298,6 +337,8 @@ public class JDMUI {
     newButton.addActionListener(buttonListener);
     exitDownloadMenu.addActionListener(buttonListener);
     item1.addActionListener(buttonListener);
+    removeButton.addActionListener(buttonListener);
+    removeDownloadMenue.addActionListener(buttonListener);
 
     queuesButton.addActionListener(new ActionListener() {
         @Override
@@ -347,6 +388,8 @@ public class JDMUI {
         for(int i = downloads.size()-1 ; i>= 0 ; i--){
             DownloadPanel panel = new DownloadPanel(downloads.get(i));
             panel5.add(panel.getPanel());
+            if(downloads.get(i).isSelected())
+                panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
         }
         frame.revalidate();
         frame.repaint();
@@ -354,7 +397,9 @@ public class JDMUI {
 
     public static void showQueueList(){
         panel5.removeAll();
-        if(queuedDownloads.size()>=1)
+        if(queuedDownloads.size()==0)
+            panel6.setVisible(false);
+        else if(queuedDownloads.size()>=1)
             panel6.setVisible(true);
             ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size() + 1);
             panel5.add(panel6);
