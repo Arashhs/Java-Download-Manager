@@ -179,6 +179,14 @@ public class JDMUI {
                 tabButtons[i].setText("      Queue");
 
             }
+
+            processingButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JDMUI.showDownloadList();
+                }
+            });
+
             tabButtons[i].setIconTextGap(30);
             tabButtons[i].setVerticalTextPosition(SwingConstants.CENTER);
             tabButtons[i].setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -261,6 +269,13 @@ public class JDMUI {
     exitDownloadMenu.addActionListener(buttonListener);
     item1.addActionListener(buttonListener);
 
+    queuesButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JDMUI.showQueueList();
+        }
+    });
+
     frame.pack();
     frame.setLocationRelativeTo(null);
 
@@ -297,6 +312,17 @@ public class JDMUI {
         ((GridLayout) panel5.getLayout()).setRows(downloads.size());
         for(int i = downloads.size()-1 ; i>= 0 ; i--){
             DownloadPanel panel = new DownloadPanel(downloads.get(i));
+            panel5.add(panel.getPanel());
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
+    public static void showQueueList(){
+        panel5.removeAll();
+        ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size());
+        for(int i = queuedDownloads.size()-1 ; i>= 0 ; i--){
+            DownloadPanel panel = new DownloadPanel(queuedDownloads.get(i));
             panel5.add(panel.getPanel());
         }
         frame.revalidate();
