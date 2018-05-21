@@ -25,12 +25,12 @@ public class JDMUI {
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
         SpringLayout layout1 = new SpringLayout();
-        Icon newIcon = new ImageIcon(getClass().getResource("new.png"));
-        Icon pauseIcon = new ImageIcon(getClass().getResource("pause.png"));
-        Icon resumeIcon = new ImageIcon(getClass().getResource("resume.png"));
-        Icon cancelIcon = new ImageIcon(getClass().getResource("cancel.png"));
-        Icon removeIcon = new ImageIcon(getClass().getResource("remove.png"));
-        Icon settingsIcon = new ImageIcon(getClass().getResource("settings.png"));
+        Icon newIcon = new ImageIcon(getClass().getResource("assets\\new.png"));
+        Icon pauseIcon = new ImageIcon(getClass().getResource("assets\\pause.png"));
+        Icon resumeIcon = new ImageIcon(getClass().getResource("assets\\resume.png"));
+        Icon cancelIcon = new ImageIcon(getClass().getResource("assets\\cancel.png"));
+        Icon removeIcon = new ImageIcon(getClass().getResource("assets\\remove.png"));
+        Icon settingsIcon = new ImageIcon(getClass().getResource("assets\\settings.png"));
         JButton newButton = new JButton("", newIcon);
         JButton pauseButton = new JButton("", pauseIcon);
         JButton resumeButton = new JButton("", resumeIcon);
@@ -120,7 +120,7 @@ public class JDMUI {
         //panel1.add(downloadTable);
         JPanel panel2 = new JPanel(new GridLayout());
         JPanel panel3 = new JPanel(new FlowLayout());
-        ImageIcon eagleIcon = new ImageIcon(getClass().getResource("logo.png"));
+        ImageIcon eagleIcon = new ImageIcon(getClass().getResource("assets\\logo.png"));
         JLabel label3 = new JLabel();
         label3.setIcon(eagleIcon);
         layout1.putConstraint(SpringLayout.NORTH,panel2,0,SpringLayout.SOUTH,downloadToolbar);
@@ -148,9 +148,9 @@ public class JDMUI {
         panel1.add(panel3);
        // JTabbedPane tabs = new JTabbedPane(SwingConstants.VERTICAL);
        // panel3.add(tabs);
-        Icon processingIcon = new ImageIcon(getClass().getResource("processing.png"));
-        Icon completedIcon = new ImageIcon(getClass().getResource("completed.png"));
-        Icon queuesIcon = new ImageIcon(getClass().getResource("queue.png"));
+        Icon processingIcon = new ImageIcon(getClass().getResource("assets\\processing.png"));
+        Icon completedIcon = new ImageIcon(getClass().getResource("assets\\completed.png"));
+        Icon queuesIcon = new ImageIcon(getClass().getResource("assets\\queue.png"));
         JButton processingButton = new JButton();
         JButton completedButton = new JButton();
         JButton queuesButton = new JButton();
@@ -209,7 +209,7 @@ public class JDMUI {
         panel2.add(scrollPane);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("icon.png"));
+        Image img = Toolkit.getDefaultToolkit().getImage(getClass().getResource("assets\\icon.png"));
         frame.setIconImage(img);
         PopupMenu popMenu= new PopupMenu();
         MenuItem item1 = new MenuItem("Exit");
@@ -260,7 +260,7 @@ public class JDMUI {
                 else if(e.getSource().equals(exitDownloadMenu)||e.getSource().equals(item1))
                     System.exit(0);
 
-                else if(e.getSource().equals(removeButton)||e.getSource().equals(resumeDownloadMenu)){
+                else if(e.getSource().equals(removeButton)||e.getSource().equals(removeDownloadMenue)){
                     int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected tasks?", "Remove", JOptionPane.YES_NO_OPTION);
                     if (reply == JOptionPane.YES_OPTION) {
                             Iterator<Download> it = downloads.iterator();
@@ -281,6 +281,12 @@ public class JDMUI {
 
                     }
                 }
+                else if(e.getSource().equals(pauseButton)||e.getSource().equals(pauseDownloadMenu))
+                    System.out.println("Pause");
+                else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu))
+                    System.out.println("Resume");
+                else if(e.getSource().equals(cancelButton)||e.getSource().equals(cancelDownloadMenu))
+                    System.out.println("Cancel");
         }
 
     }
@@ -291,8 +297,8 @@ public class JDMUI {
         panel6 = new JPanel(new GridLayout(1, 5));
         JButton up = new JButton();
         JButton down = new JButton();
-        ImageIcon upIcon = new ImageIcon(getClass().getResource("up.png"));
-        ImageIcon downIcon = new ImageIcon(getClass().getResource("down.png"));
+        ImageIcon upIcon = new ImageIcon(getClass().getResource("assets\\up.png"));
+        ImageIcon downIcon = new ImageIcon(getClass().getResource("assets\\down.png"));
         up.setIcon(upIcon);
         down.setIcon(downIcon);
         panel6.add(startQueue);
@@ -348,6 +354,12 @@ public class JDMUI {
     item1.addActionListener(buttonListener);
     removeButton.addActionListener(buttonListener);
     removeDownloadMenue.addActionListener(buttonListener);
+    pauseButton.addActionListener(buttonListener);
+    pauseDownloadMenu.addActionListener(buttonListener);
+    resumeButton.addActionListener(buttonListener);
+    resumeDownloadMenu.addActionListener(buttonListener);
+    cancelButton.addActionListener(buttonListener);
+    cancelDownloadMenu.addActionListener(buttonListener);
 
     queuesButton.addActionListener(new ActionListener() {
         @Override
