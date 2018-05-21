@@ -265,6 +265,10 @@ public class JDMUI {
                     if (reply == JOptionPane.YES_OPTION) {
                             Iterator<Download> it = downloads.iterator();
                             Iterator<Download> it2 = queuedDownloads.iterator();
+                            for(Download download: downloads){
+                                if(download.isSelected())
+                                    FileUnits.backupRemovedDownload(download);
+                            }
                             while (it.hasNext()) {
                                 if (it.next().isSelected()) {
                                     it.remove();

@@ -113,4 +113,5 @@ public class Download implements Serializable {
     public void setSelected(boolean selected) {
         isSelected = selected;
     }
+
 }
