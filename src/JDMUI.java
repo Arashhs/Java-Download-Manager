@@ -276,6 +276,7 @@ public class JDMUI {
                             }
                         }
                             showDownloadList();
+                            FileUnits.saveAllDownloads(downloads);
                     }
                     else {
 
@@ -384,6 +385,7 @@ public class JDMUI {
 
     public static void addDownload(Download download){
         downloads.add(download);
+        FileUnits.saveAllDownloads(downloads);
      //   DownloadPanel panel = new DownloadPanel(download);
      //   GridLayout layout = (GridLayout) panel5.getLayout();
      //   layout.setRows(layout.getRows()+1);
@@ -436,5 +438,21 @@ public class JDMUI {
 
     public static ArrayList<Download> getQueuedDownloads() {
         return queuedDownloads;
+    }
+
+    public static ArrayList<Download> getDownloads() {
+        return downloads;
+    }
+
+    public static void setDownloads(ArrayList<Download> downloads) {
+        JDMUI.downloads = downloads;
+    }
+
+    public static void setQueuedDownloads(ArrayList<Download> queuedDownloads) {
+        JDMUI.queuedDownloads = queuedDownloads;
+    }
+
+    public static void updateDownloadsPanel(){
+        showDownloadList();
     }
 }

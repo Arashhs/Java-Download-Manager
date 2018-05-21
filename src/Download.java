@@ -1,4 +1,6 @@
-public class Download {
+import java.io.Serializable;
+
+public class Download implements Serializable {
     private String URL;
     private String fileName;
     private int downloadedSize;
