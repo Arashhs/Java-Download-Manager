@@ -5,6 +5,7 @@ public class FileUnits {
 
     public FileUnits() {
         loadAllDownloads();
+        loadQueue();
         JDMUI.updateDownloadsPanel();
     }
 
@@ -19,11 +20,34 @@ public class FileUnits {
         }
     }
 
+    public static void saveQueue(ArrayList<Download> queue) {
+        try {
+            ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("userdata\\queue.jdm"));
+            outputStream.writeObject(queue);
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void loadAllDownloads() {
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("userdata\\list.jdm"));
             ArrayList<Download> downloads = (ArrayList<Download>) inputStream.readObject();
             JDMUI.setDownloads(downloads);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadQueue() {
+        try {
+            ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("userdata\\queue.jdm"));
+            ArrayList<Download> queue = (ArrayList<Download>) inputStream.readObject();
+            JDMUI.setQueuedDownloads(queue);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
