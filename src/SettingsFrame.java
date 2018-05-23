@@ -15,7 +15,7 @@ public class SettingsFrame extends JDialog {
         lookAndFeel = 0;
         setModalityType(DEFAULT_MODALITY_TYPE);
         downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
-        panel = new JPanel(new GridLayout(5,1));
+        panel = new JPanel(new GridLayout(7,1));
         setContentPane(panel);
         JPanel panel2 = new JPanel(new FlowLayout());
         JLabel label1 = new JLabel("Maximum number of downloading files at the same time: (Set 0 for unlimited) ");
@@ -117,6 +117,13 @@ public class SettingsFrame extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.pack();
         this.setLocationRelativeTo(null);
+
+        JLabel label4 = new JLabel("Restrict these URL's for download:");
+        panel.add(label4);
+        label4.setHorizontalTextPosition(SwingConstants.CENTER);
+        JTextArea textArea = new JTextArea();
+        panel.add(new JScrollPane(textArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED));
+
 
 
     }
