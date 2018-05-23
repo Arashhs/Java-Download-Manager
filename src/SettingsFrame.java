@@ -10,13 +10,15 @@ import java.util.ArrayList;
 public class SettingsFrame extends JDialog {
     private JPanel panel;
     private static String downloadDirectory;
-    private int lookAndFeel;
+    private static int lookAndFeel;
     private static JTextArea textArea;
+    private static int maxDL;
 
     public SettingsFrame() throws IOException {
-        lookAndFeel = 0;
+        FileUnits.loadSettings();
         setModalityType(DEFAULT_MODALITY_TYPE);
-        downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
+        if(downloadDirectory.equals(""))
+            downloadDirectory = System.getProperty("user.home") +  "\\Desktop";
         panel = new JPanel(new GridLayout(7,1));
         setContentPane(panel);
         JPanel panel2 = new JPanel(new FlowLayout());
@@ -24,6 +26,7 @@ public class SettingsFrame extends JDialog {
         SpinnerNumberModel model = new SpinnerNumberModel(0, 0, 100, 1);
         JSpinner spinner = new JSpinner(model);
         JFormattedTextField txt = ((JSpinner.NumberEditor) spinner.getEditor()).getTextField();
+        spinner.setValue(maxDL);
         ((NumberFormatter) txt.getFormatter()).setAllowsInvalid(false);
         panel2.add(label1);
         panel2.add(spinner);
@@ -37,10 +40,11 @@ public class SettingsFrame extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new File(System.getProperty("user.home") +  "\\Desktop"));
+                fileChooser.setCurrentDirectory(new File(downloadDirectory));
                 fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
                 fileChooser.setAcceptAllFileFilterUsed(false);
                 fileChooser.setDialogTitle("Select directory");
+                textField.setText(downloadDirectory);
 
                 if (fileChooser.showOpenDialog(null) == JFileChooser.APPROVE_OPTION) {
                     downloadDirectory = fileChooser.getSelectedFile().getAbsolutePath();
@@ -68,6 +72,18 @@ public class SettingsFrame extends JDialog {
         panel4.add(laf1);
         panel4.add(laf2);
         panel4.add(laf3);
+
+        switch (lookAndFeel){
+            case 0:
+                laf1.setSelected(true);
+                break;
+            case 1:
+                laf2.setSelected(true);
+                break;
+            case 2:
+                laf3.setSelected(true);
+                break;
+        }
 
         class Listener implements ActionListener {
             PrintWriter writer = new PrintWriter("LAF.jdm");
@@ -132,6 +148,7 @@ public class SettingsFrame extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 FileUnits.saveFilteredURLs();
+                FileUnits.saveSettings((Integer) spinner.getValue(),downloadDirectory,lookAndFeel);
             }
         });
 
@@ -152,5 +169,25 @@ public class SettingsFrame extends JDialog {
     public void loadFilteredURLsToSettingsPanel(){
         String filtered = String.join("\n",FileUnits.loadFilteredURLs());
         textArea.setText(filtered);
+    }
+
+    public static void setDownloadDirectory(String downloadDirectory) {
+        SettingsFrame.downloadDirectory = downloadDirectory;
+    }
+
+    public static int getLookAndFeel() {
+        return lookAndFeel;
+    }
+
+    public static void setLookAndFeel(int lookAndFeel) {
+        SettingsFrame.lookAndFeel = lookAndFeel;
+    }
+
+    public static int getMaxDL() {
+        return maxDL;
+    }
+
+    public static void setMaxDL(int maxDL) {
+        SettingsFrame.maxDL = maxDL;
     }
 }

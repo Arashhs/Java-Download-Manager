@@ -108,4 +108,54 @@ public class FileUnits {
         }
         return null;
     }
-}
+
+    public static void saveSettings(int maxDL, String Directory , int laf){
+        try {
+            FileWriter writer = new FileWriter("userdata\\settings.jdm");
+            PrintWriter printWriter = new PrintWriter(writer);
+            printWriter.println(maxDL);
+            printWriter.println(Directory);
+            printWriter.println(laf);
+            printWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads settings
+     * @return Look and Feel status
+     */
+    public static void loadSettings(){
+        try {
+            FileReader reader = new FileReader("userdata\\settings.jdm");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            SettingsFrame.setMaxDL(Integer.parseInt(bufferedReader.readLine()));
+            SettingsFrame.setDownloadDirectory(bufferedReader.readLine());
+            int laf = Integer.parseInt(bufferedReader.readLine());
+            SettingsFrame.setLookAndFeel(laf);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e){
+
+        }
+    }
+
+    public static int lookAndFeel(){
+        try {
+            FileReader reader = new FileReader("userdata\\settings.jdm");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            bufferedReader.readLine();
+            bufferedReader.readLine();
+            int laf = Integer.parseInt(bufferedReader.readLine());
+            return laf;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e){
+
+        }
+        return 0;
+    }
+ }

@@ -5,42 +5,36 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
-        int laf = 0;
-        try {
-            BufferedReader br = new BufferedReader(new FileReader("LAF.jdm"));
-            laf = Integer.parseInt(br.readLine());
-
-        }
-        catch (Exception e){
-            laf = 1;
-        }
+        int laf = FileUnits.lookAndFeel();
         System.out.println(laf);
         try {
-            if(laf == 0) {
-                UIManager.setLookAndFeel(
-                        UIManager.getSystemLookAndFeelClassName());
-            }
-            else if(laf == 1){
-             //   UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            if (laf == 0) {
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            } else if (laf == 1) {
                 UIManager.setLookAndFeel("com.sun.java.swing.plaf.motfi.MotfiLookAndFeel");
-            }
-            else if(laf == 2){
-             //   UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+            } else if (laf == 2) {
                 UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
             }
-        } catch (Exception e) {
+        }
+        catch (ClassNotFoundException e){
+
+        }
+        catch (InstantiationException e){
+
+        }
+        catch (IllegalAccessException e){
+
+        }
+        catch (UnsupportedLookAndFeelException e){
 
         }
         JDMUI jdm;
-        try{jdm = new JDMUI();
+        try {
+            jdm = new JDMUI();
             jdm.setVisible(true);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             System.err.print("Exception");
         }
         FileUnits fileUnits = new FileUnits();
-
-
     }
-
 }
