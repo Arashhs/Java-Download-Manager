@@ -5,11 +5,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class SettingsFrame extends JDialog {
     private JPanel panel;
     private static String downloadDirectory;
     private int lookAndFeel;
+    private static JTextArea textArea;
 
     public SettingsFrame() throws IOException {
         lookAndFeel = 0;
@@ -121,14 +123,34 @@ public class SettingsFrame extends JDialog {
         JLabel label4 = new JLabel("Restrict these URL's for download:");
         panel.add(label4);
         label4.setHorizontalTextPosition(SwingConstants.CENTER);
-        JTextArea textArea = new JTextArea();
+        textArea = new JTextArea();
         panel.add(new JScrollPane(textArea,ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED));
-
-
+        loadFilteredURLsToSettingsPanel();
+        JButton button1 = new JButton("Apply");
+        panel.add(button1);
+        button1.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FileUnits.saveFilteredURLs();
+            }
+        });
 
     }
 
     public static String getDownloadDirectory() {
         return downloadDirectory;
+    }
+
+    public static JTextArea getTextArea() {
+        return textArea;
+    }
+
+    public void setTextArea(JTextArea textArea) {
+        this.textArea = textArea;
+    }
+
+    public void loadFilteredURLsToSettingsPanel(){
+        String filtered = String.join("\n",FileUnits.loadFilteredURLs());
+        textArea.setText(filtered);
     }
 }
