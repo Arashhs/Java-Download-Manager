@@ -1,3 +1,5 @@
+import com.sun.scenario.Settings;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -34,17 +36,22 @@ public class NewDownload extends JDialog {
         button3.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if(button1.isSelected()){
-                    Download download = new Download(tf.getText());
-                    JDMUI.addDownload(download);
-                    JDMUI.showDownloadList();
-                    dispose();
+                if(isFiltered(tf.getText())){
+                    JOptionPane optionPane = new JOptionPane();
+                    JOptionPane.showMessageDialog(optionPane,"Selected URL is blocked.","Attention",optionPane.ERROR_MESSAGE);
                 }
-                else if(button2.isSelected()){
-                    Download download = new Download(tf.getText());
-                    JDMUI.addQueued(download);
-                    JDMUI.showDownloadList();
-                    dispose();
+                else {
+                    if (button1.isSelected()) {
+                        Download download = new Download(tf.getText());
+                        JDMUI.addDownload(download);
+                        JDMUI.showDownloadList();
+                        dispose();
+                    } else if (button2.isSelected()) {
+                        Download download = new Download(tf.getText());
+                        JDMUI.addQueued(download);
+                        JDMUI.showDownloadList();
+                        dispose();
+                    }
                 }
             }
         });
@@ -60,5 +67,13 @@ public class NewDownload extends JDialog {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setLocationRelativeTo(null);
 
+    }
+
+    public boolean isFiltered(String URL){
+        for(String string: FileUnits.loadFilteredURLs()){
+            if(URL.contains(string))
+                return true;
+        }
+        return false;
     }
 }

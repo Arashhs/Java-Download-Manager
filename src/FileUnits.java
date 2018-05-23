@@ -1,9 +1,12 @@
+
 import java.io.*;
 import java.util.ArrayList;
 
 public class FileUnits {
+    private static ArrayList<java.lang.String> filteredURLs;
 
     public FileUnits() {
+        filteredURLs = new ArrayList<>();
         loadAllDownloads();
         loadQueue();
         JDMUI.updateDownloadsPanel();
@@ -72,5 +75,37 @@ public class FileUnits {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void saveFilteredURLs(){
+        try {
+            FileWriter writer = new FileWriter("userdata\\filter.jdm");
+            PrintWriter printWriter = new PrintWriter(writer);
+            printWriter.write(SettingsFrame.getTextArea().getText());
+            printWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static ArrayList<String> loadFilteredURLs(){
+        try {
+            filteredURLs.clear();
+            FileReader reader = new FileReader("userdata\\filter.jdm");
+            BufferedReader bufferedReader = new BufferedReader(reader);
+            String url;
+            while ((url = bufferedReader.readLine()) != null){
+                filteredURLs.add(url);
+            }
+            bufferedReader.close();
+            return filteredURLs;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e){
+
+        }
+        return null;
     }
 }
