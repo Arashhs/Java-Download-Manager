@@ -34,12 +34,14 @@ public class JDMUI {
         Icon cancelIcon = new ImageIcon(getClass().getResource("assets\\cancel.png"));
         Icon removeIcon = new ImageIcon(getClass().getResource("assets\\remove.png"));
         Icon settingsIcon = new ImageIcon(getClass().getResource("assets\\settings.png"));
+        Icon sortIcon = new ImageIcon(getClass().getResource("assets\\sort.png"));
         JButton newButton = new JButton("", newIcon);
         JButton pauseButton = new JButton("", pauseIcon);
         JButton resumeButton = new JButton("", resumeIcon);
         JButton cancelButton = new JButton("", cancelIcon);
         JButton removeButton = new JButton("", removeIcon);
         JButton settingsButton = new JButton("", settingsIcon);
+        JButton sortButton = new JButton("",sortIcon);
         ArrayList<JButton> downloadButtons = new ArrayList<>();
         downloadButtons.add(newButton);
         downloadButtons.add(pauseButton);
@@ -47,17 +49,19 @@ public class JDMUI {
         downloadButtons.add(cancelButton);
         downloadButtons.add(removeButton);
         downloadButtons.add(settingsButton);
+        downloadButtons.add(sortButton);
         newButton.setToolTipText("New download");
         pauseButton.setToolTipText("Pause");
         resumeButton.setToolTipText("Resume");
         cancelButton.setToolTipText("Cancel download task");
         removeButton.setToolTipText("Completely remove download task");
         settingsButton.setToolTipText("Settings");
+        sortButton.setToolTipText("Sort");
         JToolBar downloadToolbar = new JToolBar();
         for (int i = 0; i < downloadButtons.size(); i++) {
             downloadButtons.get(i).setPreferredSize(new Dimension(56,30));
            downloadToolbar.add(downloadButtons.get(i));
-            if(downloadButtons.get(i).equals(newButton) || downloadButtons.get(i).equals(cancelButton)||downloadButtons.get(i).equals(removeButton))
+            if(downloadButtons.get(i).equals(newButton) || downloadButtons.get(i).equals(cancelButton)||downloadButtons.get(i).equals(removeButton)||downloadButtons.get(i).equals(settingsButton))
                 downloadToolbar.addSeparator(new Dimension(20,20));
         //    downloadButtons.get(i).setContentAreaFilled(false);
             downloadButtons.get(i).setFocusPainted(false);
@@ -71,6 +75,16 @@ public class JDMUI {
         downloadToolbar.setBackground(Color.decode("#d0dff8"));
      //   panel1.add(downloadToolbar);
         frame.add(panel1);
+        JComboBox sortComboBox = new JComboBox();
+        downloadToolbar.add(sortComboBox);
+        sortComboBox.addItem("Start Date (Ascending)");
+        sortComboBox.addItem("Start Date (Descending)");
+        sortComboBox.addItem("Filen Name (Ascending)");
+        sortComboBox.addItem("Filen Name (Descending)");
+        sortComboBox.addItem("File Size (Ascending)");
+        sortComboBox.addItem("File Size (Descending)");
+        sortComboBox.setVisible(false);
+        sortComboBox.setSelectedIndex(1);
         searchField = new JTextField("Search files");
         downloadToolbar.add(searchField);
         searchField.addFocusListener(new FocusListener() {
@@ -94,6 +108,8 @@ public class JDMUI {
                 showSearchResult();
             }
         });
+
+
         JMenuBar menuBar = new JMenuBar();
         JMenu downloadMenu = new JMenu("Download");
         JMenuItem newDownloadMenu = new JMenuItem("New Download");
@@ -260,11 +276,6 @@ public class JDMUI {
             System.err.print("Exception");
         }
 
-
-
-
-
-
         class ButtonListener implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 if(e.getSource().equals(settingsButton)||e.getSource().equals(settingsDownloadMenue)){
@@ -319,6 +330,11 @@ public class JDMUI {
                     System.out.println("Resume");
                 else if(e.getSource().equals(cancelButton)||e.getSource().equals(cancelDownloadMenu))
                     System.out.println("Cancel");
+                else if(e.getSource().equals(sortButton)){
+                    sortComboBox.setVisible(!sortComboBox.isVisible());
+                    panel1.revalidate();
+                    panel1.repaint();
+                }
         }
 
     }
@@ -393,6 +409,7 @@ public class JDMUI {
     resumeDownloadMenu.addActionListener(buttonListener);
     cancelButton.addActionListener(buttonListener);
     cancelDownloadMenu.addActionListener(buttonListener);
+    sortButton.addActionListener(buttonListener);
 
     queuesButton.addActionListener(new ActionListener() {
         @Override
