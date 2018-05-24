@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class DownloadInfo extends JDialog {
 
@@ -57,7 +59,8 @@ public class DownloadInfo extends JDialog {
         JLabel date1,date2;
         date1 = new JLabel("    Started Date: ");
         date2 = new JLabel();
-        date2.setText(download.getStartDate().toString());
+        DateFormat df = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+        date2.setText(df.format(download.getStartDate()));
         panel6.add(date1);
         panel6.add(date2);
         panel6.setBorder(BorderFactory.createLineBorder(Color.black));

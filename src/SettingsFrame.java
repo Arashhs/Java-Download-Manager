@@ -86,7 +86,6 @@ public class SettingsFrame extends JDialog {
         }
 
         class Listener implements ActionListener {
-            PrintWriter writer = new PrintWriter("LAF.jdm");
             Listener() throws IOException {
 
             }
@@ -122,8 +121,6 @@ public class SettingsFrame extends JDialog {
                     }
 
                 }
-                writer.print(lookAndFeel);
-                writer.close();
             }
         }
         Listener listener = new Listener();

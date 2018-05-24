@@ -1,4 +1,5 @@
 import java.io.Serializable;
+import java.util.Date;
 
 public class Download implements Serializable {
     private String URL;
@@ -40,6 +41,12 @@ public class Download implements Serializable {
                 if(this.URL.equals(other.URL) && this.fileName.equals(other.fileName))
                     return true;
                 return false;
+    }
+
+    public boolean searchRes(String s){
+        if(this.URL.contains(s) || this.fileName.contains(s))
+            return true;
+        return false;
     }
 
     public int getDownloaded() {
