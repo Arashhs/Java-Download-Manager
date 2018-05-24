@@ -75,16 +75,30 @@ public class JDMUI {
         downloadToolbar.setBackground(Color.decode("#d0dff8"));
      //   panel1.add(downloadToolbar);
         frame.add(panel1);
-        JComboBox sortComboBox = new JComboBox();
-        downloadToolbar.add(sortComboBox);
-        sortComboBox.addItem("Start Date (Ascending)");
-        sortComboBox.addItem("Start Date (Descending)");
-        sortComboBox.addItem("Filen Name (Ascending)");
-        sortComboBox.addItem("Filen Name (Descending)");
-        sortComboBox.addItem("File Size (Ascending)");
-        sortComboBox.addItem("File Size (Descending)");
-        sortComboBox.setVisible(false);
-        sortComboBox.setSelectedIndex(1);
+        JPopupMenu sortPopupMenu = new JPopupMenu("Sort Type");
+        JRadioButtonMenuItem dateAsc = new JRadioButtonMenuItem("Start Date (Ascending)");
+        JRadioButtonMenuItem dateDes = new JRadioButtonMenuItem("Start Date (Descending)");
+        JRadioButtonMenuItem nameAsc = new JRadioButtonMenuItem("Filen Name (Ascending)");
+        JRadioButtonMenuItem nameDes = new JRadioButtonMenuItem("Filen Name (Descending)");
+        JRadioButtonMenuItem sizeAsc = new JRadioButtonMenuItem("File Size (Ascending)");
+        JRadioButtonMenuItem sizeDes = new JRadioButtonMenuItem("File Size (Descending)");
+        ButtonGroup group1 = new ButtonGroup();
+        ButtonGroup group2 = new ButtonGroup();
+        ButtonGroup group3 = new ButtonGroup();
+        group1.add(dateAsc);
+        group1.add(dateDes);
+        group2.add(nameAsc);
+        group2.add(nameDes);
+        group3.add(sizeAsc);
+        group3.add(sizeDes);
+        sortPopupMenu.add(dateAsc);
+        sortPopupMenu.add(dateDes);
+        sortPopupMenu.add(new JPopupMenu.Separator());
+        sortPopupMenu.add(nameAsc);
+        sortPopupMenu.add(nameDes);
+        sortPopupMenu.add(new JPopupMenu.Separator());
+        sortPopupMenu.add(sizeAsc);
+        sortPopupMenu.add(sizeDes);
         searchField = new JTextField("Search files");
         downloadToolbar.add(searchField);
         searchField.addFocusListener(new FocusListener() {
@@ -331,9 +345,7 @@ public class JDMUI {
                 else if(e.getSource().equals(cancelButton)||e.getSource().equals(cancelDownloadMenu))
                     System.out.println("Cancel");
                 else if(e.getSource().equals(sortButton)){
-                    sortComboBox.setVisible(!sortComboBox.isVisible());
-                    panel1.revalidate();
-                    panel1.repaint();
+                    System.out.println("Sort");
                 }
         }
 
@@ -409,7 +421,12 @@ public class JDMUI {
     resumeDownloadMenu.addActionListener(buttonListener);
     cancelButton.addActionListener(buttonListener);
     cancelDownloadMenu.addActionListener(buttonListener);
-    sortButton.addActionListener(buttonListener);
+    sortButton.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mousePressed(MouseEvent e) {
+            sortPopupMenu.show(e.getComponent(), e.getX(), e.getY());
+        }
+    });
 
     queuesButton.addActionListener(new ActionListener() {
         @Override
