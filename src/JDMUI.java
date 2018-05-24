@@ -18,10 +18,13 @@ public class JDMUI {
     private static ArrayList<Download> downloads;
     private static ArrayList<Download> queuedDownloads;
     private static JPanel panel6;
+    private static ArrayList<Download> searchResult;
+    private static JTextField searchField;
 
     public JDMUI() throws AWTException {
         downloads = new ArrayList<Download>();
         queuedDownloads = new ArrayList<Download>();
+        searchResult = new ArrayList<Download>();
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
         SpringLayout layout1 = new SpringLayout();
@@ -68,6 +71,29 @@ public class JDMUI {
         downloadToolbar.setBackground(Color.decode("#d0dff8"));
      //   panel1.add(downloadToolbar);
         frame.add(panel1);
+        searchField = new JTextField("Search files");
+        downloadToolbar.add(searchField);
+        searchField.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                searchField.setText(null); // Empty the text field when it receives focus
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (searchField.getText().equals(""))
+                    searchField.setText("Search files");
+            }
+
+        });
+        searchField.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                searchDownloads(searchField.getText());
+                showSearchResult();
+            }
+        });
         JMenuBar menuBar = new JMenuBar();
         JMenu downloadMenu = new JMenu("Download");
         JMenuItem newDownloadMenu = new JMenuItem("New Download");
@@ -392,6 +418,7 @@ public class JDMUI {
     public static void addDownload(Download download){
         downloads.add(download);
         FileUnits.saveAllDownloads(downloads);
+        searchField.setText("Search files");
      //   DownloadPanel panel = new DownloadPanel(download);
      //   GridLayout layout = (GridLayout) panel5.getLayout();
      //   layout.setRows(layout.getRows()+1);
@@ -403,6 +430,7 @@ public class JDMUI {
         queuedDownloads.add(download);
         FileUnits.saveQueue(queuedDownloads);
         FileUnits.saveAllDownloads(downloads);
+        searchField.setText("Search files");
     /**    DownloadPanel panel = new DownloadPanel(download);
         GridLayout layout = (GridLayout) panel5.getLayout();
         layout.setRows(layout.getRows()+1);
@@ -443,6 +471,28 @@ public class JDMUI {
             }
             frame.revalidate();
             frame.repaint();
+    }
+
+    public static void searchDownloads(String search){
+        searchResult.clear();
+        for(Download download: downloads){
+            if(download.searchRes(search)){
+                searchResult.add(download);
+            }
+        }
+    }
+
+    public static void showSearchResult(){
+        panel5.removeAll();
+        ((GridLayout) panel5.getLayout()).setRows(searchResult.size());
+        for(int i = searchResult.size()-1 ; i>= 0 ; i--){
+            DownloadPanel panel = new DownloadPanel(searchResult.get(i));
+            panel5.add(panel.getPanel());
+            if(searchResult.get(i).isSelected())
+                panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
+        }
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static ArrayList<Download> getQueuedDownloads() {
