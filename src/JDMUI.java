@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
@@ -336,6 +337,7 @@ public class JDMUI {
                                 it2.remove();
                             }
                         }
+                            initSortedDownloads();
                             showDownloadList();
                             FileUnits.saveAllDownloads(downloads);
                             FileUnits.saveQueue(queuedDownloads);
@@ -355,24 +357,30 @@ public class JDMUI {
                 }
                 else if(e.getSource().equals(dateSort)) {
                     isDateSorted = !isDateSorted;
+                    showDownloadList();
                 }
                 else if(e.getSource().equals(nameSort)) {
                     isNameSorted = !isNameSorted;
+                    showDownloadList();
                 }
                 else if(e.getSource().equals(sizeSort)) {
                     isSizeSorted = !isSizeSorted;
+                    showDownloadList();
                 }
                 else if(e.getSource().equals(ascSort)) {
                     if(ascSort.isSelected())
                         isDescending = false;
                     else if(desSort.isSelected())
                         isDescending = true;
+                    showDownloadList();
                 }
                 else if(e.getSource().equals(desSort)){
                     if(ascSort.isSelected())
                         isDescending = false;
                     else if(desSort.isSelected())
                         isDescending = true;
+                    showDownloadList();
+
                 }
         }
 
@@ -511,13 +519,27 @@ public class JDMUI {
         FileUnits.saveQueue(queuedDownloads);
     }
 
-    public static void showDownloadList(){
+  /*  public static void showDownloadList(){
         panel5.removeAll();
         ((GridLayout) panel5.getLayout()).setRows(downloads.size());
         for(int i = downloads.size()-1 ; i>= 0 ; i--){
             DownloadPanel panel = new DownloadPanel(downloads.get(i));
             panel5.add(panel.getPanel());
             if(downloads.get(i).isSelected())
+                panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
+        }
+        frame.revalidate();
+        frame.repaint();
+    } */
+
+    public static void showDownloadList(){
+        sort();
+        panel5.removeAll();
+        ((GridLayout) panel5.getLayout()).setRows(sortedDownloads.size());
+        for(int i = sortedDownloads.size()-1 ; i>= 0 ; i--){
+            DownloadPanel panel = new DownloadPanel(sortedDownloads.get(i));
+            panel5.add(panel.getPanel());
+            if(sortedDownloads.get(i).isSelected())
                 panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
         }
         frame.revalidate();
@@ -585,8 +607,239 @@ public class JDMUI {
     }
 
     public static void initSortedDownloads(){
+        sortedDownloads.clear();
         for(Download d: downloads)
             sortedDownloads.add(d);
+    }
+
+    public static void sort(){
+        Collections.sort(sortedDownloads, new Comparator<Download>() {
+
+
+            @Override
+            public int compare(Download o1, Download o2) {
+                int compareName = o1.getFileName().compareToIgnoreCase(o2.getFileName());
+
+                if(isDateSorted && !isNameSorted && !isSizeSorted){
+                    if(isDescending){
+                        if(o1.getStartDate().before(o2.getStartDate()))
+                            return -1;
+                        else if(o1.getStartDate().after(o2.getStartDate()))
+                            return 1;
+                        return 0;
+                    }
+                    else{
+                        if(o1.getStartDate().before(o2.getStartDate()))
+                            return 1;
+                        else if(o1.getStartDate().after(o2.getStartDate()))
+                            return -1;
+                        else
+                            return 0;
+                    }
+                }
+                else if(!isDateSorted && isNameSorted && !isSizeSorted){
+                    if(isDescending){
+                        if( compareName < 0 )
+                            return -1;
+                        else if(compareName > 0)
+                            return 1;
+                        else
+                            return 0;
+                    }
+                    else{
+                        if( compareName < 0 )
+                            return 1;
+                        else if(compareName > 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
+                }
+                else if(!isDateSorted && !isNameSorted && isSizeSorted){
+                    if(isDescending){
+                        if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                            return -1;
+                        else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                            return 1;
+                        else
+                            return 0;
+                    }
+                    else{
+                        if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                            return 1;
+                        else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                            return -1;
+                        else
+                            return 0;
+                    }
+
+                }
+
+                else if(!isDateSorted && isNameSorted && isSizeSorted){
+                    if(isDescending){
+                        if( compareName < 0 )
+                            return -1;
+                        else if(compareName > 0)
+                            return 1;
+                        else{
+                            if(isDescending){
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return -1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return 1;
+                                else
+                                    return 0;
+                            }
+                            else{
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return 1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+                        }
+                    }
+                    else{
+                        if( compareName < 0 )
+                            return 1;
+                        else if(compareName > 0)
+                            return -1;
+                        else{
+                            if(isDescending){
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return -1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return 1;
+                                else
+                                    return 0;
+                            }
+                            else{
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return 1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+                        }
+                    }
+
+                }
+
+                else if(isDateSorted && isNameSorted && !isSizeSorted){
+                    if(isDescending){
+                        if( compareName < 0 )
+                            return -1;
+                        else if(compareName > 0)
+                            return 1;
+                        else{
+                            if(isDescending){
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return -1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return 1;
+                                return 0;
+                            }
+                            else{
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return 1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+                        }
+                    }
+                    else{
+                        if( compareName < 0 )
+                            return 1;
+                        else if(compareName > 0)
+                            return -1;
+                        else{
+
+                            if(isDescending){
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return -1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return 1;
+                                return 0;
+                            }
+                            else{
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return 1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+
+                        }
+                    }
+                }
+
+                else if(isDateSorted && !isNameSorted && isSizeSorted){
+
+                    if(isDescending){
+                        if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                            return -1;
+                        else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                            return 1;
+                        else{
+
+                            if(isDescending){
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return -1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return 1;
+                                return 0;
+                            }
+                            else{
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return 1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+
+                        }
+                    }
+                    else{
+                        if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                            return 1;
+                        else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                            return -1;
+                        else{
+
+                            if(isDescending){
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return -1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return 1;
+                                return 0;
+                            }
+                            else{
+                                if(o1.getStartDate().before(o2.getStartDate()))
+                                    return 1;
+                                else if(o1.getStartDate().after(o2.getStartDate()))
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+
+                        }
+                    }
+
+                }
+
+                else if(isDateSorted && isNameSorted && isSizeSorted){
+
+                }
+                
+                    return 0;
+            }
+        });
     }
 
 }
