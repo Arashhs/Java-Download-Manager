@@ -2,6 +2,12 @@
 import java.io.*;
 import java.util.ArrayList;
 
+/**
+ * File units class
+ * Fulfills all save/load tasks
+ * @author Arash
+ * @version 1.0.0
+ */
 public class FileUnits {
     private static ArrayList<java.lang.String> filteredURLs;
 
@@ -12,6 +18,10 @@ public class FileUnits {
         JDMUI.updateDownloadsPanel();
     }
 
+    /**
+     * Saves all downloads
+     * @param downloads downloads array
+     */
     public static void saveAllDownloads(ArrayList<Download> downloads) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("userdata\\list.jdm"));
@@ -23,6 +33,10 @@ public class FileUnits {
         }
     }
 
+    /**
+     * Saves queued list
+     * @param queue queued downloads
+     */
     public static void saveQueue(ArrayList<Download> queue) {
         try {
             ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("userdata\\queue.jdm"));
@@ -34,6 +48,9 @@ public class FileUnits {
         }
     }
 
+    /**
+     * Loads downloads
+     */
     public static void loadAllDownloads() {
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("userdata\\list.jdm"));
@@ -46,6 +63,9 @@ public class FileUnits {
         }
     }
 
+    /**
+     * Loads queued downloads
+     */
     public static void loadQueue() {
         try {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("userdata\\queue.jdm"));
@@ -59,6 +79,10 @@ public class FileUnits {
         }
     }
 
+    /**
+     * Backups removed downloads so that if user delete a task and wants to find out its URL/name can refer to it
+     * @param d Deleted download task
+     */
     public static void backupRemovedDownload(Download d) {
         try {
             FileWriter writer = new FileWriter("userdata\\removed.jdm", true);
@@ -78,6 +102,9 @@ public class FileUnits {
         }
     }
 
+    /**
+     * Saves filtered URLs
+     */
     public static void saveFilteredURLs(){
         try {
             FileWriter writer = new FileWriter("userdata\\filter.jdm");
@@ -89,6 +116,10 @@ public class FileUnits {
         }
     }
 
+    /**
+     * Loads filtered URLs
+     * @return filtered URL's array
+     */
     public static ArrayList<String> loadFilteredURLs(){
         try {
             filteredURLs.clear();
@@ -110,6 +141,12 @@ public class FileUnits {
         return null;
     }
 
+    /**
+     * Saves settings
+     * @param maxDL maximum number of downloading files at the same time
+     * @param Directory Directory to save downloaded files
+     * @param laf Look and Feel status
+     */
     public static void saveSettings(int maxDL, String Directory , int laf){
         try {
             FileWriter writer = new FileWriter("userdata\\settings.jdm");
@@ -143,6 +180,10 @@ public class FileUnits {
         }
     }
 
+    /**
+     *
+     * @return Look and Feel status
+     */
     public static int lookAndFeel(){
         try {
             FileReader reader = new FileReader("userdata\\settings.jdm");

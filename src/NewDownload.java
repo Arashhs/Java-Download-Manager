@@ -5,6 +5,11 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * New download panel
+ * @author Arash
+ * @version 1.0.0
+ */
 public class NewDownload extends JDialog {
 
     public NewDownload(){
@@ -69,6 +74,11 @@ public class NewDownload extends JDialog {
 
     }
 
+    /**
+     *
+     * @param URL URL of new download
+     * @return true: is filtered | false: is not filtered
+     */
     public boolean isFiltered(String URL){
         for(String string: FileUnits.loadFilteredURLs()){
             if(URL.contains(string))

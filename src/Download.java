@@ -2,6 +2,11 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Random;
 
+/**
+ * Simulates download's task
+ * @author Arash
+ * @version 1.0.0
+ */
 public class Download implements Serializable {
     private String URL;
     private String fileName;
@@ -44,6 +49,11 @@ public class Download implements Serializable {
                 return false;
     }
 
+    /**
+     * Search for entered URL or name in download task
+     * @param s searched string
+     * @return true: matched result | false: no match result
+     */
     public boolean searchRes(String s){
         if(this.URL.contains(s) || this.fileName.contains(s))
             return true;

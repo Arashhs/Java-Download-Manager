@@ -13,6 +13,11 @@ import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
 import static javax.swing.SwingUtilities.updateComponentTreeUI;
 
+/**
+ * Main frame for download manager
+ * @author Arash
+ * @version 1.0.0
+ */
 public class JDMUI {
     private static JFrame frame;
     private static JPanel panel5;
@@ -27,6 +32,10 @@ public class JDMUI {
     private static boolean isSizeSorted;
     private static boolean isDescending;
 
+    /**
+     * constructor
+     * @throws AWTException
+     */
     public JDMUI() throws AWTException {
         isDateSorted = true;
         isNameSorted = false;
@@ -296,7 +305,9 @@ public class JDMUI {
 
             System.err.print("Exception");
         }
-
+/**
+ * Listener for buttons and menue items
+ */
         class ButtonListener implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 if(e.getSource().equals(settingsButton)||e.getSource().equals(settingsDownloadMenue)){
@@ -602,16 +613,25 @@ public class JDMUI {
         JDMUI.queuedDownloads = queuedDownloads;
     }
 
+    /**
+     * updates downloads' panel
+     */
     public static void updateDownloadsPanel(){
         showDownloadList();
     }
 
+    /**
+     * initializes sorted downloads arraylist
+     */
     public static void initSortedDownloads(){
         sortedDownloads.clear();
         for(Download d: downloads)
             sortedDownloads.add(d);
     }
 
+    /**
+     * Sorts downloads according to chosen factors
+     */
     public static void sort(){
         Collections.sort(sortedDownloads, new Comparator<Download>() {
 

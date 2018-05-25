@@ -3,6 +3,11 @@ import java.awt.*;
 
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
 
+/**
+ * About developer's window in app
+ * @author Arash
+ * @version 1.0.0
+ */
 public class AboutWindow {
     private JDialog frame ;
 

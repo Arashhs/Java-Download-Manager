@@ -3,6 +3,11 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
 
+/**
+ * Download panel for each downloads. Will be added to main panel of program
+ * @author Arash
+ * @version 1.0.0
+ */
 public class DownloadPanel {
     private JPanel panel;
     private JLabel fileName;
@@ -64,8 +69,9 @@ public class DownloadPanel {
         item2.addActionListener(popUpMenueListener);
 
 
-
-
+        /**
+         * Handles selecting by mouse click
+         */
         class Listener implements MouseListener{
 
             Border redBorder = BorderFactory.createLineBorder(Color.RED,2);
@@ -124,6 +130,10 @@ public class DownloadPanel {
         return panel;
     }
 
+    /**
+     * updates progressbar
+     * @param d Download task
+     */
     public void updateProgressBar(Download d){
         progressBar.setValue(d.getDownloaded());
     }

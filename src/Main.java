@@ -2,6 +2,11 @@ import javax.swing.*;
 import java.io.*;
 import java.util.Date;
 
+/**
+ * Main class
+ * @author Arash
+ * @version 1.0.0
+ */
 public class Main {
 
 

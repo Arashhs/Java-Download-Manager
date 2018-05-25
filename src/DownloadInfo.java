@@ -3,6 +3,12 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
+/**
+ * Download info for each download task
+ * Is opened by right click/info
+ * @author Arash
+ * @version 1.0.0
+ */
 public class DownloadInfo extends JDialog {
 
     public DownloadInfo(Download download) {

@@ -7,6 +7,12 @@ import java.io.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
+/**
+ * Setting's frame of program
+ * Saves chosen settings
+ * @author Arash
+ * @version 1.0.0
+ */
 public class SettingsFrame extends JDialog {
     private JPanel panel;
     private static String downloadDirectory;
