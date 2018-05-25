@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Random;
 
 public class Download implements Serializable {
     private String URL;
@@ -26,7 +27,7 @@ public class Download implements Serializable {
 
     public Download(String URL){
         this.fileName = URL;
-        downloadedSize = 10;
+        downloadedSize = (new Random()).nextInt(10)+2;
         downloaded = 2;
         progress = 0;
         downloadStatus = 0;

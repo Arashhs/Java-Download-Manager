@@ -74,6 +74,11 @@ public class DownloadPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) {
                     if (isHighlighted) {
                         panel.setBorder(blackBorder);
@@ -89,11 +94,6 @@ public class DownloadPanel {
                     DownloadInfo info = new DownloadInfo(download);
                     info.setVisible(true); */
                 }
-            }
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-
             }
 
             @Override

@@ -835,8 +835,58 @@ public class JDMUI {
 
                 else if(isDateSorted && isNameSorted && isSizeSorted){
 
+
+                    if(isDescending){
+                        if( compareName < 0 )
+                            return -1;
+                        else if(compareName > 0)
+                            return 1;
+                        else{
+                            if(isDescending){
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return -1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return 1;
+                                else
+                                    return 0;
+                            }
+                            else{
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return 1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+                        }
+                    }
+                    else{
+                        if( compareName < 0 )
+                            return 1;
+                        else if(compareName > 0)
+                            return -1;
+                        else{
+                            if(isDescending){
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return -1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return 1;
+                                else
+                                    return 0;
+                            }
+                            else{
+                                if(o1.getDownloadedSize()<o2.getDownloadedSize())
+                                    return 1;
+                                else if(o1.getDownloadedSize()>o2.getDownloadedSize())
+                                    return -1;
+                                else
+                                    return 0;
+                            }
+                        }
+                    }
+
                 }
-                
+
                     return 0;
             }
         });
