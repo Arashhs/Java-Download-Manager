@@ -20,11 +20,21 @@ public class JDMUI {
     private static JPanel panel6;
     private static ArrayList<Download> searchResult;
     private static JTextField searchField;
+    private static ArrayList<Download> sortedDownloads;
+    private static boolean isDateSorted;
+    private static boolean isNameSorted;
+    private static boolean isSizeSorted;
+    private static boolean isDescending;
 
     public JDMUI() throws AWTException {
+        isDateSorted = true;
+        isNameSorted = false;
+        isSizeSorted = false;
+        isDescending = true;
         downloads = new ArrayList<Download>();
         queuedDownloads = new ArrayList<Download>();
         searchResult = new ArrayList<Download>();
+        sortedDownloads = new ArrayList<Download>();
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
         SpringLayout layout1 = new SpringLayout();
@@ -76,29 +86,25 @@ public class JDMUI {
      //   panel1.add(downloadToolbar);
         frame.add(panel1);
         JPopupMenu sortPopupMenu = new JPopupMenu("Sort Type");
-        JRadioButtonMenuItem dateAsc = new JRadioButtonMenuItem("Start Date (Ascending)");
-        JRadioButtonMenuItem dateDes = new JRadioButtonMenuItem("Start Date (Descending)");
-        JRadioButtonMenuItem nameAsc = new JRadioButtonMenuItem("Filen Name (Ascending)");
-        JRadioButtonMenuItem nameDes = new JRadioButtonMenuItem("Filen Name (Descending)");
-        JRadioButtonMenuItem sizeAsc = new JRadioButtonMenuItem("File Size (Ascending)");
-        JRadioButtonMenuItem sizeDes = new JRadioButtonMenuItem("File Size (Descending)");
+        JRadioButtonMenuItem dateSort = new JRadioButtonMenuItem("Start Date");
+        JRadioButtonMenuItem nameSort = new JRadioButtonMenuItem("Filen Name");
+        JRadioButtonMenuItem sizeSort = new JRadioButtonMenuItem("File Size");
+        JRadioButtonMenuItem ascSort = new JRadioButtonMenuItem("Ascending");
+        JRadioButtonMenuItem desSort = new JRadioButtonMenuItem("Descending");
         ButtonGroup group1 = new ButtonGroup();
-        ButtonGroup group2 = new ButtonGroup();
-        ButtonGroup group3 = new ButtonGroup();
-        group1.add(dateAsc);
-        group1.add(dateDes);
-        group2.add(nameAsc);
-        group2.add(nameDes);
-        group3.add(sizeAsc);
-        group3.add(sizeDes);
-        sortPopupMenu.add(dateAsc);
-        sortPopupMenu.add(dateDes);
+        group1.add(ascSort);
+        group1.add(desSort);
+        sortPopupMenu.add(dateSort);
+        sortPopupMenu.add(nameSort);
+        sortPopupMenu.add(sizeSort);
         sortPopupMenu.add(new JPopupMenu.Separator());
-        sortPopupMenu.add(nameAsc);
-        sortPopupMenu.add(nameDes);
-        sortPopupMenu.add(new JPopupMenu.Separator());
-        sortPopupMenu.add(sizeAsc);
-        sortPopupMenu.add(sizeDes);
+        sortPopupMenu.add(ascSort);
+        sortPopupMenu.add(desSort);
+
+        dateSort.setSelected(true);
+        desSort.setSelected(true);
+
+
         searchField = new JTextField("Search files");
         downloadToolbar.add(searchField);
         searchField.addFocusListener(new FocusListener() {
@@ -347,6 +353,27 @@ public class JDMUI {
                 else if(e.getSource().equals(sortButton)){
                     System.out.println("Sort");
                 }
+                else if(e.getSource().equals(dateSort)) {
+                    isDateSorted = !isDateSorted;
+                }
+                else if(e.getSource().equals(nameSort)) {
+                    isNameSorted = !isNameSorted;
+                }
+                else if(e.getSource().equals(sizeSort)) {
+                    isSizeSorted = !isSizeSorted;
+                }
+                else if(e.getSource().equals(ascSort)) {
+                    if(ascSort.isSelected())
+                        isDescending = false;
+                    else if(desSort.isSelected())
+                        isDescending = true;
+                }
+                else if(e.getSource().equals(desSort)){
+                    if(ascSort.isSelected())
+                        isDescending = false;
+                    else if(desSort.isSelected())
+                        isDescending = true;
+                }
         }
 
     }
@@ -427,6 +454,12 @@ public class JDMUI {
             sortPopupMenu.show(e.getComponent(), e.getX(), e.getY());
         }
     });
+    dateSort.addActionListener(buttonListener);
+    nameSort.addActionListener(buttonListener);
+    sizeSort.addActionListener(buttonListener);
+    ascSort.addActionListener(buttonListener);
+    desSort.addActionListener(buttonListener);
+
 
     queuesButton.addActionListener(new ActionListener() {
         @Override
@@ -451,6 +484,7 @@ public class JDMUI {
 
     public static void addDownload(Download download){
         downloads.add(download);
+        sortedDownloads.add(download);
         FileUnits.saveAllDownloads(downloads);
         searchField.setText("Search files");
      //   DownloadPanel panel = new DownloadPanel(download);
@@ -462,6 +496,7 @@ public class JDMUI {
     public static void addQueued(Download download){
         downloads.add(download);
         queuedDownloads.add(download);
+        sortedDownloads.add(download);
         FileUnits.saveQueue(queuedDownloads);
         FileUnits.saveAllDownloads(downloads);
         searchField.setText("Search files");
@@ -548,4 +583,10 @@ public class JDMUI {
     public static void updateDownloadsPanel(){
         showDownloadList();
     }
+
+    public static void initSortedDownloads(){
+        for(Download d: downloads)
+            sortedDownloads.add(d);
+    }
+
 }

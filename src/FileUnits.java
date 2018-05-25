@@ -51,6 +51,7 @@ public class FileUnits {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("userdata\\queue.jdm"));
             ArrayList<Download> queue = (ArrayList<Download>) inputStream.readObject();
             JDMUI.setQueuedDownloads(queue);
+            JDMUI.initSortedDownloads();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
