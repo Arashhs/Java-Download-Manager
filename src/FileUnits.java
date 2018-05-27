@@ -94,7 +94,7 @@ public class FileUnits {
             bufferedWriter.write(d.getFileName());
             bufferedWriter.newLine();
             bufferedWriter.write("URL: ");
-            bufferedWriter.write(d.getURL());
+            bufferedWriter.write(d.getUrl());
             bufferedWriter.close();
             writer.close();
         } catch (IOException e) {

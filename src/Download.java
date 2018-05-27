@@ -1,14 +1,19 @@
-import java.io.Serializable;
+import com.sun.scenario.Settings;
+
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.util.Date;
 import java.util.Random;
+import java.net.*;
+
 
 /**
  * Simulates download's task
  * @author Arash
  * @version 1.0.0
  */
-public class Download implements Serializable {
-    private String URL;
+public class Download implements Serializable, Runnable {
+    private String url;
     private String fileName;
     private int downloadedSize;
     private double progress;
@@ -17,6 +22,7 @@ public class Download implements Serializable {
     private boolean queueStatus; //false: not Queued | true: Queued
     private boolean isSelected;
     private Date startDate;
+    private static final int BUFFER_SIZE = 4096;
 
     public Download(String fileName, int fileSize) {
         this.fileName = fileName;
@@ -25,26 +31,26 @@ public class Download implements Serializable {
         progress = 0;
         downloadStatus = 0;
         queueStatus = false;
-        URL = "";
+        url = "";
         isSelected = false;
         startDate = new Date();
     }
 
-    public Download(String URL){
-        this.fileName = URL;
+    public Download(String url){
+        this.fileName = url;
         downloadedSize = (new Random()).nextInt(10)+2;
         downloaded = 2;
         progress = 0;
         downloadStatus = 0;
         queueStatus = false;
-        this.URL = URL;
+        this.url = url;
         isSelected = false;
         startDate = new Date();
     }
 
     public boolean equals(Object o){
                 Download other = (Download) o;
-                if(this.URL.equals(other.URL) && this.fileName.equals(other.fileName))
+                if(this.url.equals(other.url) && this.fileName.equals(other.fileName))
                     return true;
                 return false;
     }
@@ -55,9 +61,74 @@ public class Download implements Serializable {
      * @return true: matched result | false: no match result
      */
     public boolean searchRes(String s){
-        if(this.URL.contains(s) || this.fileName.contains(s))
+        if(this.url.contains(s) || this.fileName.contains(s))
             return true;
         return false;
+    }
+
+    public void downloadFile() throws IOException {
+        SettingsFrame settingsFrame = new SettingsFrame();
+        settingsFrame.dispose();
+        URL fileUrl = new URL(url);
+        HttpURLConnection httpConn = (HttpURLConnection) fileUrl.openConnection();
+        int responseCode = httpConn.getResponseCode();
+
+        // Check HTTP response code first
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            String fileName = "";
+            String disposition = httpConn.getHeaderField("Content-Disposition");
+            String contentType = httpConn.getContentType();
+            int contentLength = httpConn.getContentLength();
+
+            if (disposition != null) {
+                // extracts file name from header field
+                int index = disposition.indexOf("filename=");
+                if (index > 0) {
+                    fileName = disposition.substring(index + 10,
+                            disposition.length() - 1);
+                }
+            } else {
+                // extracts file name from URL
+                fileName = url.substring(url.lastIndexOf("/") + 1,
+                        url.length());
+            }
+
+            System.out.println("Content-Type = " + contentType);
+            System.out.println("Content-Disposition = " + disposition);
+            System.out.println("Content-Length = " + contentLength);
+            System.out.println("fileName = " + fileName);
+
+            // opens input stream from the HTTP connection
+            InputStream inputStream = httpConn.getInputStream();
+            String saveFilePath = SettingsFrame.getDownloadDirectory() + File.separator + fileName;
+            System.out.println(saveFilePath);
+
+            // opens an output stream to save into file
+            FileOutputStream outputStream = new FileOutputStream(saveFilePath);
+
+            int bytesRead = -1;
+            byte[] buffer = new byte[BUFFER_SIZE];
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            outputStream.close();
+            inputStream.close();
+
+            System.out.println("File downloaded");
+        } else {
+            System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+        }
+        httpConn.disconnect();
+    }
+
+    @Override
+    public void run() {
+        try {
+            downloadFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public int getDownloaded() {
@@ -108,12 +179,12 @@ public class Download implements Serializable {
         this.queueStatus = queueStatus;
     }
 
-    public String getURL() {
-        return URL;
+    public String getUrl() {
+        return url;
     }
 
-    public void setURL(String URL) {
-        this.URL = URL;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public Date getStartDate() {

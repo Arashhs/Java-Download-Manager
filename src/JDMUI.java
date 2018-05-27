@@ -359,8 +359,13 @@ public class JDMUI {
                 }
                 else if(e.getSource().equals(pauseButton)||e.getSource().equals(pauseDownloadMenu))
                     System.out.println("Pause");
-                else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu))
+                else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu)){
                     System.out.println("Resume");
+                    Thread thread = new Thread(downloads.get(0));
+                    Thread thread1 = new Thread(downloads.get(1));
+                    thread.start();
+                    thread1.start();
+                }
                 else if(e.getSource().equals(cancelButton)||e.getSource().equals(cancelDownloadMenu))
                     System.out.println("Cancel");
                 else if(e.getSource().equals(sortButton)){

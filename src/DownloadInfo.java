@@ -34,7 +34,7 @@ public class DownloadInfo extends JDialog {
         saveTo2 = new JLabel(SettingsFrame.getDownloadDirectory());
         JLabel url1,url2;
         url1 = new JLabel("    URL: ");
-        url2 = new JLabel(download.getURL());
+        url2 = new JLabel(download.getUrl());
         JPanel panel1 = new JPanel(new GridLayout(1,2));
         panel1.add(fileName1);
         panel1.add(fileName2);
