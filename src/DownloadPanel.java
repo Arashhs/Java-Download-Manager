@@ -17,6 +17,7 @@ public class DownloadPanel {
 
 
     public DownloadPanel(Download download) {
+        System.out.println(download.getDownloaded());
         speed = new JLabel("0Mb/s");
         GridLayout layout = new GridLayout(0,1);
         panel = new JPanel(layout);
@@ -24,10 +25,10 @@ public class DownloadPanel {
         fileName = new JLabel();
         progressBar = new JProgressBar(0,100);
         progressBar.setMinimum(0);
-        progressBar.setMaximum(download.getDownloadedSize());
-        progressBar.setValue(download.getDownloaded());
+        progressBar.setMaximum((int) download.getDownloadedSize());
+        progressBar.setValue((int) download.getDownloaded());
         progress = new JLabel();
-        progress.setText(download.getDownloaded()+"MB/"+download.getDownloadedSize()+"MB");
+        progress.setText(download.getStringSizeLengthFile(download.getDownloaded())+" / "+download.getStringSizeLengthFile(download.getDownloadedSize()));
         fileName.setText(download.getFileName());
         progressBar.setStringPainted(true);
         fileName.setHorizontalAlignment(SwingConstants.CENTER);
@@ -135,6 +136,8 @@ public class DownloadPanel {
      * @param d Download task
      */
     public void updateProgressBar(Download d){
-        progressBar.setValue(d.getDownloaded());
+        progressBar.setValue((int)d.getDownloaded());
+        panel.revalidate();
+        panel.repaint();
     }
 }
