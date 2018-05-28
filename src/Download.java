@@ -23,6 +23,7 @@ public class Download implements Serializable, Runnable {
     private int downloadStatus; //0: paused | 1: downloading | 2: Completed
     private boolean queueStatus; //false: not Queued | true: Queued
     private boolean isSelected;
+    private boolean isCompleted;
     private Date startDate;
     private static final int BUFFER_SIZE = 4096;
 
@@ -122,11 +123,20 @@ public class Download implements Serializable, Runnable {
 
             int bytesRead = -1;
             byte[] buffer = new byte[BUFFER_SIZE];
-            System.out.println(downloaded);
-            while ((downloadStatus==1) && ((bytesRead = inputStream.read(buffer)) != -1)) {
+            double speedInKBps = 0.0D;
+            long startTime, endTime;
+            startTime = System.nanoTime();
+            int i = 1;
+            while ((downloadStatus==1) && (((startTime = System.nanoTime()))!=0) && ((bytesRead = inputStream.read(buffer)) != -1)) {
                 outputStream.write(buffer, 0, bytesRead);
                 downloaded += bytesRead;
-                JDMUI.getDownloadPanelMap().get(this).updateProgressBar(this);
+                JDMUI.getDownloadPanelMap().get(this.url).updateProgressBar(this,speedInKBps);
+                endTime = System.nanoTime();
+                if((i%100)==39) {
+                    speedInKBps = (bytesRead / 1024) / (((double) (endTime - startTime)) / 1000000000);
+                    i=1;
+                }
+                i++;
             }
             System.out.println(downloaded);
             outputStream.flush();
@@ -201,7 +211,15 @@ public class Download implements Serializable, Runnable {
     }
 
     public long getDownloaded() {
-        return downloaded;
+        SettingsFrame settingsFrame = null;
+        try {
+            settingsFrame = new SettingsFrame();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        settingsFrame.dispose();
+        return downloaded = (new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length();
+
     }
 
     public void setDownloaded(int downloaded) {
@@ -272,4 +290,11 @@ public class Download implements Serializable, Runnable {
         isSelected = selected;
     }
 
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
+    }
 }

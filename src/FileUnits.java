@@ -56,6 +56,11 @@ public class FileUnits {
             ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("userdata\\list.jdm"));
             ArrayList<Download> downloads = (ArrayList<Download>) inputStream.readObject();
             JDMUI.setDownloads(downloads);
+            for(Download download: JDMUI.getDownloads()){
+                download.setDownloadStatus(0);
+                if(download.isCompleted())
+                    download.setDownloadStatus(2);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
