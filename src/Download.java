@@ -1,7 +1,9 @@
 import com.sun.scenario.Settings;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Random;
 import java.net.*;
@@ -15,37 +17,46 @@ import java.net.*;
 public class Download implements Serializable, Runnable {
     private String url;
     private String fileName;
-    private int downloadedSize;
+    private long downloadedSize;
     private double progress;
-    private int downloaded;
+    private long downloaded;
     private int downloadStatus; //0: paused | 1: downloading | 2: Completed
     private boolean queueStatus; //false: not Queued | true: Queued
     private boolean isSelected;
     private Date startDate;
     private static final int BUFFER_SIZE = 4096;
 
-    public Download(String fileName, int fileSize) {
-        this.fileName = fileName;
-        downloadedSize = 0;
-        downloaded = 0;
-        progress = 0;
-        downloadStatus = 0;
-        queueStatus = false;
-        url = "";
-        isSelected = false;
-        startDate = new Date();
-    }
 
     public Download(String url){
-        this.fileName = url;
-        downloadedSize = (new Random()).nextInt(10)+2;
-        downloaded = 2;
-        progress = 0;
-        downloadStatus = 0;
-        queueStatus = false;
-        this.url = url;
-        isSelected = false;
-        startDate = new Date();
+        try {
+            SettingsFrame settingsFrame = new SettingsFrame();
+            settingsFrame.dispose();
+            URL fileUrl = new URL(url);
+            HttpURLConnection httpConn = (HttpURLConnection) fileUrl.openConnection();
+            fileName = url.substring(url.lastIndexOf("/") + 1, url.length());
+            downloadedSize = httpConn.getContentLength();
+            downloaded = (new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length();
+            progress = getIntSizeLengthFile((new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length());
+            downloadStatus = 1;
+            queueStatus = false;
+            this.url = url;
+            isSelected = false;
+            startDate = new Date();
+            httpConn.disconnect();
+
+        }
+        catch (IOException e){
+            this.fileName = url;
+            downloadedSize = (new Random()).nextInt(10) + 2;
+            downloaded = 2;
+            progress = 0;
+            downloadStatus = 0;
+            queueStatus = false;
+            this.url = url;
+            isSelected = false;
+            startDate = new Date();
+        }
+
     }
 
     public boolean equals(Object o){
@@ -71,10 +82,15 @@ public class Download implements Serializable, Runnable {
         settingsFrame.dispose();
         URL fileUrl = new URL(url);
         HttpURLConnection httpConn = (HttpURLConnection) fileUrl.openConnection();
+        String byteRange = downloaded + "-" + downloadedSize;
+        System.out.println("Downloaded:"+downloaded+"  Size: "+downloadedSize);
+        httpConn.setRequestProperty("Range", "bytes=" + byteRange);
+
         int responseCode = httpConn.getResponseCode();
 
+
         // Check HTTP response code first
-        if (responseCode == HttpURLConnection.HTTP_OK) {
+        if (responseCode/100 == 2) {
             String fileName = "";
             String disposition = httpConn.getHeaderField("Content-Disposition");
             String contentType = httpConn.getContentType();
@@ -93,25 +109,27 @@ public class Download implements Serializable, Runnable {
                         url.length());
             }
 
-            System.out.println("Content-Type = " + contentType);
-            System.out.println("Content-Disposition = " + disposition);
-            System.out.println("Content-Length = " + contentLength);
-            System.out.println("fileName = " + fileName);
-
             // opens input stream from the HTTP connection
             InputStream inputStream = httpConn.getInputStream();
+         //   inputStream.skip(downloaded);
             String saveFilePath = SettingsFrame.getDownloadDirectory() + File.separator + fileName;
             System.out.println(saveFilePath);
 
             // opens an output stream to save into file
-            FileOutputStream outputStream = new FileOutputStream(saveFilePath);
+            FileOutputStream outputStream = new FileOutputStream(saveFilePath,true);
+          /*  RandomAccessFile raf = new RandomAccessFile(saveFilePath,"rw");
+            raf.seek(downloaded); */
 
             int bytesRead = -1;
             byte[] buffer = new byte[BUFFER_SIZE];
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
+            System.out.println(downloaded);
+            while ((downloadStatus==1) && ((bytesRead = inputStream.read(buffer)) != -1)) {
                 outputStream.write(buffer, 0, bytesRead);
+                downloaded += bytesRead;
+                JDMUI.getDownloadPanelMap().get(this).updateProgressBar(this);
             }
-
+            System.out.println(downloaded);
+            outputStream.flush();
             outputStream.close();
             inputStream.close();
 
@@ -131,7 +149,58 @@ public class Download implements Serializable, Runnable {
         }
     }
 
-    public int getDownloaded() {
+    public String getStringSizeLengthFile(long n) {
+
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        float sizeKb = 1024.0f;
+        float sizeMo = sizeKb * sizeKb;
+        float sizeGo = sizeMo * sizeKb;
+        float sizeTerra = sizeGo * sizeKb;
+
+
+        if(n < sizeMo)
+            return df.format(n / sizeKb)+ " KB";
+        else if(n < sizeGo)
+            return df.format(n / sizeMo) + " MB";
+        else if(n < sizeTerra)
+            return df.format(n / sizeGo) + " GB";
+
+        return "";
+    }
+
+    public float getIntSizeLengthFile(long downloadSize) {
+
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        float sizeKb = 1024.0f;
+        float sizeMo = sizeKb * sizeKb;
+        float sizeGo = sizeMo * sizeKb;
+        float sizeTerra = sizeGo * sizeKb;
+
+
+        if(downloadedSize < sizeMo)
+            return Float.parseFloat(df.format(downloadedSize / sizeKb));
+        else if(downloadedSize < sizeGo)
+            return Float.parseFloat(df.format(downloadedSize / sizeMo));
+        else if(downloadedSize < sizeTerra)
+            return Float.parseFloat(df.format(downloadedSize / sizeGo));
+
+        return 0;
+    }
+
+    public String getFilePath(){
+        SettingsFrame settingsFrame = null;
+        try {
+            settingsFrame = new SettingsFrame();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        settingsFrame.dispose();
+        return SettingsFrame.getDownloadDirectory() + File.separator + fileName;
+    }
+
+    public long getDownloaded() {
         return downloaded;
     }
 
@@ -147,11 +216,11 @@ public class Download implements Serializable, Runnable {
         this.fileName = fileName;
     }
 
-    public int getDownloadedSize() {
+    public long getDownloadedSize() {
         return downloadedSize;
     }
 
-    public void setDownloadedSize(int downloadedSize) {
+    public void setDownloadedSize(long downloadedSize) {
         this.downloadedSize = downloadedSize;
     }
 

@@ -28,7 +28,8 @@ public class DownloadInfo extends JDialog {
         JLabel size1 , size2;
         size1 = new JLabel("    Size: ");
         size2 = new JLabel();
-        size2.setText(Integer.toString(download.getDownloadedSize())+"MB");
+        size2.setText(download.getStringSizeLengthFile(download.getDownloadedSize()));
+
         JLabel saveTo1,saveTo2;
         saveTo1 = new JLabel("    Save To: ");
         saveTo2 = new JLabel(SettingsFrame.getDownloadDirectory());

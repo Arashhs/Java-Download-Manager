@@ -137,6 +137,7 @@ public class DownloadPanel {
      */
     public void updateProgressBar(Download d){
         progressBar.setValue((int)d.getDownloaded());
+        progress.setText(d.getStringSizeLengthFile(d.getDownloaded())+" / "+d.getStringSizeLengthFile(d.getDownloadedSize()));
         panel.revalidate();
         panel.repaint();
     }

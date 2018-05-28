@@ -4,6 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.Object;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 /**
  * New download panel
@@ -44,6 +48,14 @@ public class NewDownload extends JDialog {
                 if(isFiltered(tf.getText())){
                     JOptionPane optionPane = new JOptionPane();
                     JOptionPane.showMessageDialog(optionPane,"Selected URL is blocked.","Attention",optionPane.ERROR_MESSAGE);
+                }
+                else if(!isValidURL(tf.getText())){
+                    JOptionPane optionPane = new JOptionPane();
+                    JOptionPane.showMessageDialog(optionPane,"Please enter a valid URL","Attention",optionPane.ERROR_MESSAGE);
+                }
+                else if(isAlreadyDownloading(tf.getText())){
+                    JOptionPane optionPane = new JOptionPane();
+                    JOptionPane.showMessageDialog(optionPane,"Download task already exists","Attention",optionPane.ERROR_MESSAGE);
                 }
                 else {
                     if (button1.isSelected()) {
@@ -86,4 +98,32 @@ public class NewDownload extends JDialog {
         }
         return false;
     }
-}
+
+    public boolean isValidURL(String url) {
+
+        URL u = null;
+
+        try {
+            u = new URL(url);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+
+        try {
+            u.toURI();
+        } catch (URISyntaxException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public boolean isAlreadyDownloading(String s){
+        for(Download download: JDMUI.getDownloads()){
+            if(download.getUrl().equals(s))
+                return true;
+        }
+        return false;
+    }
+
+    }

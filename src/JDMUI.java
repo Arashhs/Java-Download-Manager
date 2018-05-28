@@ -2,12 +2,10 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import java.util.*;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
@@ -27,6 +25,7 @@ public class JDMUI {
     private static ArrayList<Download> searchResult;
     private static JTextField searchField;
     private static ArrayList<Download> sortedDownloads;
+    private static HashMap<Download,DownloadPanel> downloadPanelMap;
     private static boolean isDateSorted;
     private static boolean isNameSorted;
     private static boolean isSizeSorted;
@@ -45,6 +44,7 @@ public class JDMUI {
         queuedDownloads = new ArrayList<Download>();
         searchResult = new ArrayList<Download>();
         sortedDownloads = new ArrayList<Download>();
+        downloadPanelMap = new HashMap<Download,DownloadPanel>();
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
         SpringLayout layout1 = new SpringLayout();
@@ -335,8 +335,10 @@ public class JDMUI {
                             Iterator<Download> it = downloads.iterator();
                             Iterator<Download> it2 = queuedDownloads.iterator();
                             for(Download download: downloads){
-                                if(download.isSelected())
+                                if(download.isSelected()) {
                                     FileUnits.backupRemovedDownload(download);
+                                    (new File(download.getFilePath())).delete();
+                                }
                             }
                             while (it.hasNext()) {
                                 if (it.next().isSelected()) {
@@ -357,14 +359,23 @@ public class JDMUI {
 
                     }
                 }
-                else if(e.getSource().equals(pauseButton)||e.getSource().equals(pauseDownloadMenu))
+                else if(e.getSource().equals(pauseButton)||e.getSource().equals(pauseDownloadMenu)) {
                     System.out.println("Pause");
+                    for(Download download: downloads){
+                        if(download.isSelected()) {
+                            download.setDownloadStatus(0);
+                        }
+                    }
+                }
                 else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu)){
                     System.out.println("Resume");
-                    Thread thread = new Thread(downloads.get(0));
-                    Thread thread1 = new Thread(downloads.get(1));
-                    thread.start();
-                    thread1.start();
+                    for(Download download: downloads){
+                        if(download.isSelected()) {
+                            download.setDownloadStatus(1);
+                            Thread thread = new Thread(download);
+                            thread.start();
+                        }
+                    }
                 }
                 else if(e.getSource().equals(cancelButton)||e.getSource().equals(cancelDownloadMenu))
                     System.out.println("Cancel");
@@ -509,7 +520,9 @@ public class JDMUI {
     public static void addDownload(Download download){
         downloads.add(download);
         sortedDownloads.add(download);
-        FileUnits.saveAllDownloads(downloads);
+         Thread thread = new Thread(download);
+          thread.start();
+         FileUnits.saveAllDownloads(downloads);
         searchField.setText("Search files");
      //   DownloadPanel panel = new DownloadPanel(download);
      //   GridLayout layout = (GridLayout) panel5.getLayout();
@@ -554,6 +567,7 @@ public class JDMUI {
         ((GridLayout) panel5.getLayout()).setRows(sortedDownloads.size());
         for(int i = sortedDownloads.size()-1 ; i>= 0 ; i--){
             DownloadPanel panel = new DownloadPanel(sortedDownloads.get(i));
+            downloadPanelMap.put(sortedDownloads.get(i),panel);
             panel5.add(panel.getPanel());
             if(sortedDownloads.get(i).isSelected())
                 panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
@@ -917,4 +931,7 @@ public class JDMUI {
         });
     }
 
+    public static HashMap<Download, DownloadPanel> getDownloadPanelMap() {
+        return downloadPanelMap;
+    }
 }
