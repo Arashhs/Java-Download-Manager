@@ -20,16 +20,18 @@ public class Download implements Serializable, Runnable {
     private long downloadedSize;
     private double progress;
     private long downloaded;
-    private int downloadStatus; //0: paused | 1: downloading | 2: Completed
-    private boolean queueStatus; //false: not Queued | true: Queued
+    private int downloadStatus; //0: paused | 1: downloading | 2: Completed | 3: Waiting
+    private boolean isQueued; //false: not Queued | true: Queued
     private boolean isSelected;
     private boolean isCompleted;
     private Date startDate;
     private static final int BUFFER_SIZE = 4096;
+    private double speedInKBps;
 
 
     public Download(String url){
         try {
+            speedInKBps = 0;
             SettingsFrame settingsFrame = new SettingsFrame();
             settingsFrame.dispose();
             URL fileUrl = new URL(url);
@@ -39,7 +41,7 @@ public class Download implements Serializable, Runnable {
             downloaded = (new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length();
             progress = getIntSizeLengthFile((new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length());
             downloadStatus = 1;
-            queueStatus = false;
+            isQueued = false;
             this.url = url;
             isSelected = false;
             startDate = new Date();
@@ -52,7 +54,7 @@ public class Download implements Serializable, Runnable {
             downloaded = 2;
             progress = 0;
             downloadStatus = 0;
-            queueStatus = false;
+            isQueued = false;
             this.url = url;
             isSelected = false;
             startDate = new Date();
@@ -61,10 +63,10 @@ public class Download implements Serializable, Runnable {
     }
 
     public boolean equals(Object o){
-                Download other = (Download) o;
-                if(this.url.equals(other.url) && this.fileName.equals(other.fileName))
-                    return true;
-                return false;
+        Download d = (Download) o;
+        if(this.getUrl().equals(d.getUrl()))
+            return true;
+        return false;
     }
 
     /**
@@ -84,7 +86,6 @@ public class Download implements Serializable, Runnable {
         URL fileUrl = new URL(url);
         HttpURLConnection httpConn = (HttpURLConnection) fileUrl.openConnection();
         String byteRange = downloaded + "-" + downloadedSize;
-        System.out.println("Downloaded:"+downloaded+"  Size: "+downloadedSize);
         httpConn.setRequestProperty("Range", "bytes=" + byteRange);
 
         int responseCode = httpConn.getResponseCode();
@@ -114,7 +115,6 @@ public class Download implements Serializable, Runnable {
             InputStream inputStream = httpConn.getInputStream();
          //   inputStream.skip(downloaded);
             String saveFilePath = SettingsFrame.getDownloadDirectory() + File.separator + fileName;
-            System.out.println(saveFilePath);
 
             // opens an output stream to save into file
             FileOutputStream outputStream = new FileOutputStream(saveFilePath,true);
@@ -123,7 +123,7 @@ public class Download implements Serializable, Runnable {
 
             int bytesRead = -1;
             byte[] buffer = new byte[BUFFER_SIZE];
-            double speedInKBps = 0.0D;
+            speedInKBps = 0.0D;
             long startTime, endTime;
             startTime = System.nanoTime();
             int i = 1;
@@ -132,13 +132,12 @@ public class Download implements Serializable, Runnable {
                 downloaded += bytesRead;
                 JDMUI.getDownloadPanelMap().get(this.url).updateProgressBar(this,speedInKBps);
                 endTime = System.nanoTime();
-                if((i%100)==39) {
+                if(i>=39) {
                     speedInKBps = (bytesRead / 1024) / (((double) (endTime - startTime)) / 1000000000);
                     i=1;
                 }
                 i++;
             }
-            System.out.println(downloaded);
             outputStream.flush();
             outputStream.close();
             inputStream.close();
@@ -200,30 +199,33 @@ public class Download implements Serializable, Runnable {
     }
 
     public String getFilePath(){
-        SettingsFrame settingsFrame = null;
+ /*       SettingsFrame settingsFrame = null;
         try {
             settingsFrame = new SettingsFrame();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        settingsFrame.dispose();
+        settingsFrame.dispose(); */
         return SettingsFrame.getDownloadDirectory() + File.separator + fileName;
     }
 
     public long getDownloaded() {
-        SettingsFrame settingsFrame = null;
         try {
-            settingsFrame = new SettingsFrame();
+            SettingsFrame settingsFrame = new SettingsFrame();
+            settingsFrame.dispose();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        settingsFrame.dispose();
         return downloaded = (new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length();
 
     }
 
     public void setDownloaded(int downloaded) {
         this.downloaded = downloaded;
+    }
+
+    public void setCurrentDownloaded(){
+        this.downloaded = (new File(SettingsFrame.getDownloadDirectory() + File.separator + fileName)).length();
     }
 
     public String getFileName() {
@@ -258,12 +260,12 @@ public class Download implements Serializable, Runnable {
         this.downloadStatus = downloadStatus;
     }
 
-    public boolean isQueueStatus() {
-        return queueStatus;
+    public boolean isQueued() {
+        return isQueued;
     }
 
-    public void setQueueStatus(boolean queueStatus) {
-        this.queueStatus = queueStatus;
+    public void setQueued(boolean queueStatus) {
+        this.isQueued = queueStatus;
     }
 
     public String getUrl() {
@@ -296,5 +298,13 @@ public class Download implements Serializable, Runnable {
 
     public void setCompleted(boolean completed) {
         isCompleted = completed;
+    }
+
+    public double getSpeedInKBps() {
+        return speedInKBps;
+    }
+
+    public void setSpeedInKBps(double speedInKBps) {
+        this.speedInKBps = speedInKBps;
     }
 }
