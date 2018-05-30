@@ -511,6 +511,14 @@ public class JDMUI {
             }
         });
 
+        startQueue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Thread thread = new Thread(new Queue());
+                thread.start();
+            }
+        });
+
         ButtonListener buttonListener = new ButtonListener();
     settingsButton.addActionListener(buttonListener);
     settingsDownloadMenue.addActionListener(buttonListener);
@@ -637,11 +645,27 @@ public class JDMUI {
             panel6.setVisible(true);
             ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size() + 1);
             panel5.add(panel6);
-            for (int i = 0; i < queuedDownloads.size(); i++) {
-                DownloadPanel panel = downloadPanelMap.get(queuedDownloads.get(i).getUrl());
-                panel5.add(panel.getPanel());
-                if(queuedDownloads.get(i).isSelected())
-                    panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
+            try {
+
+                for (int i = 0; i < queuedDownloads.size(); i++) {
+                    DownloadPanel panel = downloadPanelMap.get(queuedDownloads.get(i).getUrl());
+                    panel5.add(panel.getPanel());
+                    if (queuedDownloads.get(i).isSelected())
+                        panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                }
+            }
+            catch (IndexOutOfBoundsException e){
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
+                for (int i = 0; i < queuedDownloads.size(); i++) {
+                    DownloadPanel panel = downloadPanelMap.get(queuedDownloads.get(i).getUrl());
+                    panel5.add(panel.getPanel());
+                    if (queuedDownloads.get(i).isSelected())
+                        panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+                }
             }
             frame.revalidate();
             frame.repaint();

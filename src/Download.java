@@ -81,6 +81,7 @@ public class Download implements Serializable, Runnable {
     }
 
     public void downloadFile() throws IOException {
+        downloadStatus = 1;
         SettingsFrame settingsFrame = new SettingsFrame();
         settingsFrame.dispose();
         URL fileUrl = new URL(url);

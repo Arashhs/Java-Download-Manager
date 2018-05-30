@@ -37,7 +37,7 @@ public class DownloadPanel {
         fileName.setHorizontalAlignment(SwingConstants.CENTER);
         progress.setHorizontalAlignment(SwingConstants.CENTER);
         downloadState = new JLabel();
-        downloadState.setText(download.getDownloadStatus() == 0 ? "Paused" : download.getDownloadStatus() == 1 ? "Downloading" : download.getDownloadStatus() == 2 ? "Completed" : "Waiting");
+        downloadState.setText(download.getDownloadStatus() == 0 ? "Paused" : download.getDownloadStatus() == 1 ? "Downloading" : download.getDownloadStatus() == 2 ? "Completed" : download.getDownloadStatus() == 3 ? "Waiting" : "Unknown");
         downloadState.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(fileName);
         panel.add(progressBar);
@@ -175,5 +175,9 @@ public class DownloadPanel {
                 FileUnits.saveQueue(JDMUI.getQueuedDownloads());
             }
         }
+    }
+
+    public void updateDownloadState(Download d){
+        downloadState.setText(d.getDownloadStatus() == 0 ? "Paused" : d.getDownloadStatus() == 1 ? "Downloading" : d.getDownloadStatus() == 2 ? "Completed" : d.getDownloadStatus() == 3 ? "Waiting" : "Unknown");
     }
 }
