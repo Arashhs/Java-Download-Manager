@@ -24,7 +24,7 @@ public class DownloadInfo extends JDialog {
         JLabel status1, status2;
         status1 = new JLabel("    Status");
         status2 = new JLabel();
-        status2.setText(download.getDownloadStatus() == 0 ? "Paused" : download.getDownloadStatus() == 1 ? "Downloading" : "Completed");
+        status2.setText(download.getDownloadStatus() == 0 ? "Paused" : download.getDownloadStatus() == 1 ? "Downloading" : download.getDownloadStatus() == 2 ? "Completed" : "Waiting");
         JLabel size1 , size2;
         size1 = new JLabel("    Size: ");
         size2 = new JLabel();
