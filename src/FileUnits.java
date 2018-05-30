@@ -15,6 +15,7 @@ public class FileUnits {
         filteredURLs = new ArrayList<>();
         loadAllDownloads();
         loadQueue();
+        initQueue();
         JDMUI.updateDownloadsPanel();
     }
 
@@ -61,6 +62,7 @@ public class FileUnits {
           //      download.setCurrentDownloaded();
                 if(download.isCompleted())
                     download.setDownloadStatus(2);
+                download.setSelected(false);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -205,5 +207,17 @@ public class FileUnits {
 
         }
         return 0;
+    }
+
+    public static void initQueue(){
+        for (int i = 0 ; i < JDMUI.getQueuedDownloads().size() ; i++){
+            Download d = JDMUI.getQueuedDownloads().get(i);
+            for(Download d2 : JDMUI.getDownloads()){
+                if(d.equals(d2)){
+                    JDMUI.getQueuedDownloads().remove(d);
+                    JDMUI.getQueuedDownloads().add(i,d2);
+                }
+            }
+        }
     }
  }

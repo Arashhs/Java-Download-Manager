@@ -90,6 +90,8 @@ public class DownloadPanel {
             public void mouseClicked(MouseEvent e) {
 
                 if ((e.getClickCount() == 2) && (download.isCompleted())) {
+                    panel.setBorder(blackBorder);
+                    download.setSelected(false);
                     Desktop desktop = Desktop.getDesktop();
                     File file = new File(download.getFilePath());
                     if(file.exists()) {
@@ -105,19 +107,21 @@ public class DownloadPanel {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) {
-                    if (isHighlighted) {
-                        panel.setBorder(blackBorder);
-                        download.setSelected(false);
-                    } else {
-                        panel.setBorder(redBorder);
-                        download.setSelected(true);
-                    }
-                    isHighlighted = !isHighlighted;
-                } else if (SwingUtilities.isRightMouseButton(e)) {
+                if (e.getClickCount() == 1) {
+                    if (SwingUtilities.isLeftMouseButton(e)) {
+                        if (isHighlighted) {
+                            panel.setBorder(blackBorder);
+                            download.setSelected(false);
+                        } else {
+                            panel.setBorder(redBorder);
+                            download.setSelected(true);
+                        }
+                        isHighlighted = !isHighlighted;
+                    } else if (SwingUtilities.isRightMouseButton(e)) {
                     /*
                     DownloadInfo info = new DownloadInfo(download);
                     info.setVisible(true); */
+                    }
                 }
             }
 
@@ -144,7 +148,6 @@ public class DownloadPanel {
             download.setDownloadStatus(2);
             download.setCompleted(true);
         }
-
 
     }
 

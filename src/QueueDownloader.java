@@ -1,6 +1,6 @@
-public class Queue implements Runnable {
+public class QueueDownloader implements Runnable {
 
-    public Queue() {
+    public QueueDownloader() {
     }
 
 
