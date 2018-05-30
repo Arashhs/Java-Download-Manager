@@ -372,17 +372,23 @@ public class JDMUI {
                             download.setDownloadStatus(0);
                             if(download.isCompleted())
                                 download.setDownloadStatus(2);
+                            updateDownloadStatus(download);
                         }
                     }
                     showCurrentList();
                 }
                 else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu)){
                     for(Download download: downloads){
-                        if(download.isSelected()) {
+                        if(isFiltered(download)){
+                            JOptionPane optionPane = new JOptionPane();
+                            JOptionPane.showMessageDialog(optionPane,"One or more URLs in the list is/are blocked.","Attention",optionPane.ERROR_MESSAGE);
+                        }
+                        else if(download.isSelected() && !download.isCompleted()) {
                             download.setDownloadStatus(1);
                             Thread thread = new Thread(download);
                             thread.start();
                         }
+                        updateDownloadStatus(download);
                     }
                     showCurrentList();
                 }
@@ -482,6 +488,8 @@ public class JDMUI {
                     }
                 }
                 JDMUI.showQueueList();
+                FileUnits.saveQueue(queuedDownloads);
+
             }
         });
 
@@ -494,6 +502,8 @@ public class JDMUI {
                     }
                 }
                 JDMUI.showQueueList();
+                FileUnits.saveQueue(queuedDownloads);
+
             }
         });
 
@@ -521,6 +531,17 @@ public class JDMUI {
             public void actionPerformed(ActionEvent e) {
                 Thread thread = new Thread(new QueueDownloader());
                 thread.start();
+            }
+        });
+
+        stopQueue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(Download download: JDMUI.getQueuedDownloads()){
+                    download.setDownloadStatus(0);
+                    JDMUI.getDownloadPanelMap().get(download.getUrl()).updateDownloadState(download);
+                }
+                JDMUI.showCurrentList();
             }
         });
 
@@ -1028,7 +1049,20 @@ public class JDMUI {
         }
     }
 
+    public void updateDownloadStatus(Download download){
+        downloadPanelMap.get(download.getUrl()).updateDownloadState(download);
+    }
+
     public static HashMap<String, DownloadPanel> getDownloadPanelMap() {
         return downloadPanelMap;
     }
+
+    public boolean isFiltered(Download d){
+        for(String string: FileUnits.loadFilteredURLs()){
+            if(d.getUrl().contains(string))
+                return true;
+        }
+        return false;
+    }
+
 }
