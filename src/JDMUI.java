@@ -30,12 +30,14 @@ public class JDMUI {
     private static boolean isNameSorted;
     private static boolean isSizeSorted;
     private static boolean isDescending;
+    private static int currentList; //0: DownloadsList | 1: CompletedList | 2: QueuesList
 
     /**
      * constructor
      * @throws AWTException
      */
     public JDMUI() throws AWTException {
+        currentList = 0;
         isDateSorted = true;
         isNameSorted = false;
         isSizeSorted = false;
@@ -264,6 +266,13 @@ public class JDMUI {
                 }
             });
 
+            completedButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    JDMUI.showCompletedList();
+                }
+            });
+
             tabButtons[i].setIconTextGap(30);
             tabButtons[i].setVerticalTextPosition(SwingConstants.CENTER);
             tabButtons[i].setHorizontalTextPosition(SwingConstants.RIGHT);
@@ -360,7 +369,6 @@ public class JDMUI {
                     }
                 }
                 else if(e.getSource().equals(pauseButton)||e.getSource().equals(pauseDownloadMenu)) {
-                    System.out.println("Pause");
                     for(Download download: downloads){
                         if(download.isSelected()) {
                             download.setDownloadStatus(0);
@@ -370,7 +378,6 @@ public class JDMUI {
                     }
                 }
                 else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu)){
-                    System.out.println("Resume");
                     for(Download download: downloads){
                         if(download.isSelected()) {
                             download.setDownloadStatus(1);
@@ -409,33 +416,82 @@ public class JDMUI {
                     }
                 }
                 else if(e.getSource().equals(sortButton)){
-                    System.out.println("Sort");
                 }
                 else if(e.getSource().equals(dateSort)) {
                     isDateSorted = !isDateSorted;
-                    showDownloadList();
+                    switch (currentList){
+                        case 0:
+                            showDownloadList();
+                            break;
+                        case 1:
+                            showCompletedList();
+                            break;
+                        case 2:
+                            showQueueList();
+                            break;
+                    }
                 }
                 else if(e.getSource().equals(nameSort)) {
                     isNameSorted = !isNameSorted;
-                    showDownloadList();
+                    switch (currentList){
+                        case 0:
+                            showDownloadList();
+                            break;
+                        case 1:
+                            showCompletedList();
+                            break;
+                        case 2:
+                            showQueueList();
+                            break;
+                    }
                 }
                 else if(e.getSource().equals(sizeSort)) {
                     isSizeSorted = !isSizeSorted;
-                    showDownloadList();
+                    switch (currentList){
+                        case 0:
+                            showDownloadList();
+                            break;
+                        case 1:
+                            showCompletedList();
+                            break;
+                        case 2:
+                            showQueueList();
+                            break;
+                    }
                 }
                 else if(e.getSource().equals(ascSort)) {
                     if(ascSort.isSelected())
                         isDescending = false;
                     else if(desSort.isSelected())
                         isDescending = true;
-                    showDownloadList();
+                    switch (currentList){
+                        case 0:
+                            showDownloadList();
+                            break;
+                        case 1:
+                            showCompletedList();
+                            break;
+                        case 2:
+                            showQueueList();
+                            break;
+                    }
                 }
                 else if(e.getSource().equals(desSort)){
                     if(ascSort.isSelected())
                         isDescending = false;
                     else if(desSort.isSelected())
                         isDescending = true;
-                    showDownloadList();
+                    switch (currentList){
+                        case 0:
+                            showDownloadList();
+                            break;
+                        case 1:
+                            showCompletedList();
+                            break;
+                        case 2:
+                            showQueueList();
+                            break;
+                    }
 
                 }
         }
@@ -591,21 +647,28 @@ public class JDMUI {
     } */
 
     public static void showDownloadList(){
+        currentList = 0;
         sort();
         panel5.removeAll();
+        downloadPanelMap.clear();
         ((GridLayout) panel5.getLayout()).setRows(sortedDownloads.size());
-        for(int i = sortedDownloads.size()-1 ; i>= 0 ; i--){
+        for(int i = sortedDownloads.size()-1 ; i>= 0 ; i--) {
             DownloadPanel panel = new DownloadPanel(sortedDownloads.get(i));
-            downloadPanelMap.put(sortedDownloads.get(i).getUrl(),panel);
-            panel5.add(panel.getPanel());
-            if(sortedDownloads.get(i).isSelected())
-                panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
+            downloadPanelMap.put(sortedDownloads.get(i).getUrl(), panel);
+            if (!sortedDownloads.get(i).isCompleted()) {
+                panel5.add(panel.getPanel());
+                if (sortedDownloads.get(i).isSelected())
+                    panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            }
+            else
+                ((GridLayout) panel5.getLayout()).setRows(sortedDownloads.size()-1);
         }
         frame.revalidate();
         frame.repaint();
     }
 
     public static void showQueueList(){
+        currentList = 2;
         panel5.removeAll();
         if(queuedDownloads.size()==0)
             panel6.setVisible(false);
@@ -623,6 +686,24 @@ public class JDMUI {
             frame.repaint();
     }
 
+    public static void showCompletedList(){
+        currentList = 1;
+        sort();
+        panel5.removeAll();
+        ((GridLayout) panel5.getLayout()).setRows(1);
+        for(int i = sortedDownloads.size()-1 ; i>= 0 ; i--) {
+            if (sortedDownloads.get(i).isCompleted()) {
+                DownloadPanel panel = new DownloadPanel(sortedDownloads.get(i));
+                panel5.add(panel.getPanel());
+                ((GridLayout) panel5.getLayout()).setRows(((GridLayout) panel5.getLayout()).getRows()+1);
+                if (sortedDownloads.get(i).isSelected())
+                    panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED, 2));
+            }
+        }
+        frame.revalidate();
+        frame.repaint();
+    }
+
     public static void searchDownloads(String search){
         searchResult.clear();
         for(Download download: downloads){
@@ -633,6 +714,7 @@ public class JDMUI {
     }
 
     public static void showSearchResult(){
+        currentList = 0;
         panel5.removeAll();
         ((GridLayout) panel5.getLayout()).setRows(searchResult.size());
         for(int i = searchResult.size()-1 ; i>= 0 ; i--){
@@ -682,8 +764,6 @@ public class JDMUI {
      */
     public static void sort(){
         Collections.sort(sortedDownloads, new Comparator<Download>() {
-
-
             @Override
             public int compare(Download o1, Download o2) {
                 int compareName = o1.getFileName().compareToIgnoreCase(o2.getFileName());
