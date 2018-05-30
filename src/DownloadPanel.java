@@ -17,14 +17,14 @@ public class DownloadPanel {
     private JProgressBar progressBar;
     private JLabel progress;
     private JLabel speed;
+    private JLabel downloadState;
 
 
     public DownloadPanel(Download download) {
-        System.out.println(download.getDownloaded());
         speed = new JLabel("0Mb/s");
         GridLayout layout = new GridLayout(0, 1);
         panel = new JPanel(layout);
-        JPanel panel2 = new JPanel(new GridLayout(1, 2));
+        JPanel panel2 = new JPanel(new GridLayout(1, 3));
         fileName = new JLabel();
         progressBar = new JProgressBar(0, 100);
         progressBar.setMinimum(0);
@@ -36,11 +36,15 @@ public class DownloadPanel {
         progressBar.setStringPainted(true);
         fileName.setHorizontalAlignment(SwingConstants.CENTER);
         progress.setHorizontalAlignment(SwingConstants.CENTER);
+        downloadState = new JLabel();
+        downloadState.setText(download.getDownloadStatus() == 0 ? "Paused" : download.getDownloadStatus() == 1 ? "Downloading" : download.getDownloadStatus() == 2 ? "Completed" : "Waiting");
+        downloadState.setHorizontalAlignment(SwingConstants.CENTER);
         panel.add(fileName);
         panel.add(progressBar);
         panel.add(panel2);
         speed.setHorizontalAlignment(SwingConstants.CENTER);
         panel2.add(speed);
+        panel2.add(downloadState);
         panel2.add(progress);
         panel.setBorder(BorderFactory.createLineBorder(Color.black, 2));
         //  panel.setPreferredSize(new Dimension(200,50));
@@ -164,6 +168,12 @@ public class DownloadPanel {
         if (progressBar.getValue() == progressBar.getMaximum()) {
             d.setDownloadStatus(2);
             d.setCompleted(true);
+            JDMUI.showCurrentList();
+            if(d.isQueued()){
+                JDMUI.getQueuedDownloads().remove(d);
+                JDMUI.showQueueList();
+                FileUnits.saveQueue(JDMUI.getQueuedDownloads());
+            }
         }
     }
 }

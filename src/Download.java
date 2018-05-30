@@ -75,7 +75,7 @@ public class Download implements Serializable, Runnable {
      * @return true: matched result | false: no match result
      */
     public boolean searchRes(String s){
-        if(this.url.contains(s) || this.fileName.contains(s))
+        if(this.url.toLowerCase().contains(s.toLowerCase()) || this.fileName.toLowerCase().contains(s.toLowerCase()))
             return true;
         return false;
     }
@@ -142,7 +142,7 @@ public class Download implements Serializable, Runnable {
             outputStream.close();
             inputStream.close();
 
-            System.out.println("File downloaded");
+            System.out.println("File downloaded/paused");
         } else {
             System.out.println("No file to download. Server replied HTTP code: " + responseCode);
         }

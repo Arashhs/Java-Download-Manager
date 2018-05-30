@@ -58,6 +58,7 @@ public class FileUnits {
             JDMUI.setDownloads(downloads);
             for(Download download: JDMUI.getDownloads()){
                 download.setDownloadStatus(0);
+          //      download.setCurrentDownloaded();
                 if(download.isCompleted())
                     download.setDownloadStatus(2);
             }

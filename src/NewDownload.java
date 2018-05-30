@@ -66,6 +66,7 @@ public class NewDownload extends JDialog {
                     } else if (button2.isSelected()) {
                         Download download = new Download(tf.getText());
                         JDMUI.addQueued(download);
+                        download.setQueued(true);
                         JDMUI.showDownloadList();
                         dispose();
                     }

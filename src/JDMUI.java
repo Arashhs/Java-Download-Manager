@@ -342,7 +342,6 @@ public class JDMUI {
                     int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove selected tasks?", "Remove", JOptionPane.YES_NO_OPTION);
                     if (reply == JOptionPane.YES_OPTION) {
                             Iterator<Download> it = downloads.iterator();
-                            Iterator<Download> it2 = queuedDownloads.iterator();
                             for(Download download: downloads){
                                 if(download.isSelected()) {
                                     FileUnits.backupRemovedDownload(download);
@@ -350,15 +349,14 @@ public class JDMUI {
                                 }
                             }
                             while (it.hasNext()) {
-                                if (it.next().isSelected()) {
+                                Download dd;
+                                dd = it.next();
+                                if (dd.isSelected()) {
+                                    queuedDownloads.remove(dd);
                                     it.remove();
                                 }
                             }
-                        while (it2.hasNext()) {
-                            if (it2.next().isSelected()) {
-                                it2.remove();
-                            }
-                        }
+
                             initSortedDownloads();
                             showDownloadList();
                             FileUnits.saveAllDownloads(downloads);
@@ -376,6 +374,7 @@ public class JDMUI {
                                 download.setDownloadStatus(2);
                         }
                     }
+                    showCurrentList();
                 }
                 else if(e.getSource().equals(resumeButton)||e.getSource().equals(resumeDownloadMenu)){
                     for(Download download: downloads){
@@ -385,27 +384,26 @@ public class JDMUI {
                             thread.start();
                         }
                     }
+                    showCurrentList();
                 }
                 else if(e.getSource().equals(cancelButton)||e.getSource().equals(cancelDownloadMenu)) {
                     int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel selected tasks?", "Cancel", JOptionPane.YES_NO_OPTION);
                     if (reply == JOptionPane.YES_OPTION) {
                         Iterator<Download> it = downloads.iterator();
-                        Iterator<Download> it2 = queuedDownloads.iterator();
                         for(Download download: downloads){
                             if(download.isSelected()) {
                                 FileUnits.backupRemovedDownload(download);
                             }
                         }
                         while (it.hasNext()) {
-                            if (it.next().isSelected()) {
+                            Download dd;
+                            dd = it.next();
+                            if (dd.isSelected()) {
+                                queuedDownloads.remove(dd);
                                 it.remove();
                             }
                         }
-                        while (it2.hasNext()) {
-                            if (it2.next().isSelected()) {
-                                it2.remove();
-                            }
-                        }
+
                         initSortedDownloads();
                         showDownloadList();
                         FileUnits.saveAllDownloads(downloads);
@@ -419,45 +417,15 @@ public class JDMUI {
                 }
                 else if(e.getSource().equals(dateSort)) {
                     isDateSorted = !isDateSorted;
-                    switch (currentList){
-                        case 0:
-                            showDownloadList();
-                            break;
-                        case 1:
-                            showCompletedList();
-                            break;
-                        case 2:
-                            showQueueList();
-                            break;
-                    }
+                    showCurrentList();
                 }
                 else if(e.getSource().equals(nameSort)) {
                     isNameSorted = !isNameSorted;
-                    switch (currentList){
-                        case 0:
-                            showDownloadList();
-                            break;
-                        case 1:
-                            showCompletedList();
-                            break;
-                        case 2:
-                            showQueueList();
-                            break;
-                    }
+                    showCurrentList();
                 }
                 else if(e.getSource().equals(sizeSort)) {
                     isSizeSorted = !isSizeSorted;
-                    switch (currentList){
-                        case 0:
-                            showDownloadList();
-                            break;
-                        case 1:
-                            showCompletedList();
-                            break;
-                        case 2:
-                            showQueueList();
-                            break;
-                    }
+                    showCurrentList();
                 }
                 else if(e.getSource().equals(ascSort)) {
                     if(ascSort.isSelected())
@@ -481,17 +449,7 @@ public class JDMUI {
                         isDescending = false;
                     else if(desSort.isSelected())
                         isDescending = true;
-                    switch (currentList){
-                        case 0:
-                            showDownloadList();
-                            break;
-                        case 1:
-                            showCompletedList();
-                            break;
-                        case 2:
-                            showQueueList();
-                            break;
-                    }
+                    showCurrentList();
 
                 }
         }
@@ -616,11 +574,13 @@ public class JDMUI {
     }
 
     public static void addQueued(Download download){
+        download.setQueued(true);
         downloads.add(download);
         queuedDownloads.add(download);
         sortedDownloads.add(download);
         FileUnits.saveQueue(queuedDownloads);
         FileUnits.saveAllDownloads(downloads);
+        download.setDownloadStatus(0);
         searchField.setText("Search files");
     /**    DownloadPanel panel = new DownloadPanel(download);
         GridLayout layout = (GridLayout) panel5.getLayout();
@@ -629,6 +589,7 @@ public class JDMUI {
     }
 
     public static void addAlreadyDownloadingToQueue(Download download){
+        download.setQueued(true);
         queuedDownloads.add(download);
         FileUnits.saveQueue(queuedDownloads);
     }
@@ -676,7 +637,7 @@ public class JDMUI {
             panel6.setVisible(true);
             ((GridLayout) panel5.getLayout()).setRows(queuedDownloads.size() + 1);
             panel5.add(panel6);
-            for (int i = queuedDownloads.size() - 1; i >= 0; i--) {
+            for (int i = 0; i < queuedDownloads.size(); i++) {
                 DownloadPanel panel = downloadPanelMap.get(queuedDownloads.get(i).getUrl());
                 panel5.add(panel.getPanel());
                 if(queuedDownloads.get(i).isSelected())
@@ -714,11 +675,10 @@ public class JDMUI {
     }
 
     public static void showSearchResult(){
-        currentList = 0;
         panel5.removeAll();
         ((GridLayout) panel5.getLayout()).setRows(searchResult.size());
         for(int i = searchResult.size()-1 ; i>= 0 ; i--){
-            DownloadPanel panel = getDownloadPanelMap().get(searchResult.get(i));
+            DownloadPanel panel = getDownloadPanelMap().get(searchResult.get(i).getUrl());
             panel5.add(panel.getPanel());
             if(searchResult.get(i).isSelected())
                 panel.getPanel().setBorder(BorderFactory.createLineBorder(Color.RED,2));
@@ -1038,6 +998,20 @@ public class JDMUI {
                     return 0;
             }
         });
+    }
+
+    public static void showCurrentList(){
+        switch (currentList){
+            case 0:
+                showDownloadList();
+                break;
+            case 1:
+                showCompletedList();
+                break;
+            case 2:
+                showQueueList();
+                break;
+        }
     }
 
     public static HashMap<String, DownloadPanel> getDownloadPanelMap() {

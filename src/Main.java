@@ -13,7 +13,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
 
         int laf = FileUnits.lookAndFeel();
-        System.out.println(laf);
         try {
             if (laf == 0) {
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
