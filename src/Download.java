@@ -71,8 +71,8 @@ public class Download implements Serializable, Runnable {
 
     /**
      * If URLs are equals, tasks are the same
-     * @param o
-     * @return
+     * @param o other object
+     * @return true or false
      */
     public boolean equals(Object o){
         Download d = (Download) o;
@@ -94,7 +94,7 @@ public class Download implements Serializable, Runnable {
 
     /**
      * Downloads the file in a separate thread than GUI
-     *
+     * @throws IOException exception
      */
     public void downloadFile() throws IOException {
         downloadStatus = 1;

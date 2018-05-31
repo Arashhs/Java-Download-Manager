@@ -160,6 +160,7 @@ public class DownloadPanel {
      * updates progressbar
      *
      * @param d Download task
+     * @param downloadSpeed download speed
      */
     public void updateProgressBar(Download d , double downloadSpeed) {
         progressBar.setValue((int) d.getDownloaded());

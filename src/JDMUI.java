@@ -36,7 +36,7 @@ public class JDMUI {
 
     /**
      * constructor
-     * @throws AWTException
+     * @throws AWTException exception
      */
     public JDMUI() throws AWTException {
         isQueueStarted = false;
@@ -50,7 +50,7 @@ public class JDMUI {
         searchResult = new ArrayList<Download>();
         sortedDownloads = new ArrayList<Download>();
         downloadPanelMap = new ConcurrentHashMap<String,DownloadPanel>();
-        frame = new JFrame("Java Download Manager V1.00");
+        frame = new JFrame("Java Download Manager version 1.00 by Arashhs | Don't be sorry, be BETTER!");
         JPanel panel1 = new JPanel();
         SpringLayout layout1 = new SpringLayout();
         Icon newIcon = new ImageIcon(getClass().getResource("assets\\new.png"));
@@ -1075,7 +1075,7 @@ public class JDMUI {
     /**
      * Whether or not download's URL is filtered
      * @param d Download task
-     * @return
+     * @return true or false
      */
     public boolean isFiltered(Download d){
         for(String string: FileUnits.loadFilteredURLs()){

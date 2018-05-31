@@ -15,10 +15,10 @@ public class AboutWindow {
         frame = new JDialog();
         frame.setModalityType(DEFAULT_MODALITY_TYPE);
         frame.setTitle("About Me");
-        String txt = "Java Download Manager version 1.00";
+        String txt = "Java Download Manager version 1.00 by Arashhs";
         JLabel label = new JLabel(txt);
         label.setFont(new Font("Roman",Font.BOLD,24));
-        String text = "Author: Arash Hajisafi - 9631019\nStarted date for coding project: 4/26/2018\nEnd date: ??/26/2018\nFollow tool tips to use program";
+        String text = "Author: Arash Hajisafi - 9631019\nStarted date for coding project: 4/26/2018\nEnd date: 05/31/2018\nFollow tool tips to use program";
         JTextArea textArea = new JTextArea(text);
         textArea.setFont(new Font("Serif",Font.PLAIN,17));
         textArea.setEditable(false);

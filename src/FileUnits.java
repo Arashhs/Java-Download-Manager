@@ -113,6 +113,7 @@ public class FileUnits {
 
     /**
      * Saves filtered URLs
+     * @param filtered filtered URL's
      */
     public static void saveFilteredURLs(String filtered){
         try {
@@ -172,7 +173,7 @@ public class FileUnits {
 
     /**
      * Loads settings
-     * @return Look and Feel status
+     *
      */
     public static void loadSettings(){
         try {
