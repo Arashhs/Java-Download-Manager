@@ -387,6 +387,7 @@ public class JDMUI {
                         if(isFiltered(download)){
                             JOptionPane optionPane = new JOptionPane();
                             JOptionPane.showMessageDialog(optionPane,"One or more URLs in the list is/are blocked.","Attention",optionPane.ERROR_MESSAGE);
+                            break;
                         }
                         else if(download.isSelected() && !download.isCompleted()) {
                             download.setDownloadStatus(1);
@@ -1042,6 +1043,9 @@ public class JDMUI {
         });
     }
 
+    /**
+     * Shows current selected category
+     */
     public static void showCurrentList(){
         switch (currentList){
             case 0:
@@ -1056,6 +1060,10 @@ public class JDMUI {
         }
     }
 
+    /**
+     * Updates download's state
+     * @param download Download's task
+     */
     public void updateDownloadStatus(Download download){
         downloadPanelMap.get(download.getUrl()).updateDownloadState(download);
     }
@@ -1064,6 +1072,11 @@ public class JDMUI {
         return downloadPanelMap;
     }
 
+    /**
+     * Whether or not download's URL is filtered
+     * @param d Download task
+     * @return
+     */
     public boolean isFiltered(Download d){
         for(String string: FileUnits.loadFilteredURLs()){
             if(d.getUrl().contains(string))
@@ -1076,6 +1089,9 @@ public class JDMUI {
         return isQueueStarted;
     }
 
+    /**
+     * Revalidates main frame
+     */
     public static void revalidateFrame(){
         frame.revalidate();
         frame.repaint();

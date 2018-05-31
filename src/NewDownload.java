@@ -119,6 +119,11 @@ public class NewDownload extends JDialog {
         return true;
     }
 
+    /**
+     *
+     * @param s file URL
+     * @return whether or not task already exists
+     */
     public boolean isAlreadyDownloading(String s){
         for(Download download: JDMUI.getDownloads()){
             if(download.getUrl().equals(s))

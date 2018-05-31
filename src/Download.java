@@ -12,6 +12,8 @@ import java.util.concurrent.Executor;
 
 /**
  * Simulates download's task
+ * Implements runnable
+ * Runs in a separate thread than GUI
  * @author Arash
  * @version 1.0.0
  */
@@ -30,6 +32,10 @@ public class Download implements Serializable, Runnable {
     private double speedInKBps;
 
 
+    /**
+     * Construct Download Object
+     * @param url file URL
+     */
     public Download(String url){
         try {
             speedInKBps = 0;
@@ -63,6 +69,11 @@ public class Download implements Serializable, Runnable {
 
     }
 
+    /**
+     * If URLs are equals, tasks are the same
+     * @param o
+     * @return
+     */
     public boolean equals(Object o){
         Download d = (Download) o;
         if(this.getUrl().equals(d.getUrl()))
@@ -81,6 +92,10 @@ public class Download implements Serializable, Runnable {
         return false;
     }
 
+    /**
+     * Downloads the file in a separate thread than GUI
+     *
+     */
     public void downloadFile() throws IOException {
         downloadStatus = 1;
         try {
@@ -158,6 +173,9 @@ public class Download implements Serializable, Runnable {
         }
     }
 
+    /**
+     * Run for thread
+     */
     @Override
     public void run() {
         try {
@@ -167,6 +185,11 @@ public class Download implements Serializable, Runnable {
         }
     }
 
+    /**
+     *
+     * @param n size
+     * @return size of downloaded/downloading
+     */
     public String getStringSizeLengthFile(long n) {
 
         DecimalFormat df = new DecimalFormat("0.00");
@@ -187,6 +210,11 @@ public class Download implements Serializable, Runnable {
         return "";
     }
 
+    /**
+     *
+     * @param downloadSize download's size
+     * @return optimized size
+     */
     public float getIntSizeLengthFile(long downloadSize) {
 
         DecimalFormat df = new DecimalFormat("0.00");
@@ -207,6 +235,10 @@ public class Download implements Serializable, Runnable {
         return 0;
     }
 
+    /**
+     *
+     * @return File's path
+     */
     public String getFilePath(){
  /*       SettingsFrame settingsFrame = null;
         try {
@@ -218,6 +250,10 @@ public class Download implements Serializable, Runnable {
         return SettingsFrame.getDownloadDirectory() + File.separator + fileName;
     }
 
+    /**
+     *
+     * @return downloaded size
+     */
     public long getDownloaded() {
         try {
             SettingsFrame settingsFrame = new SettingsFrame();

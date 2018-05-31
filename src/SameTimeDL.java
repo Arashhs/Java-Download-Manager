@@ -1,5 +1,11 @@
 import java.util.concurrent.Executor;
 
+/**
+ * Automatically checks sametime download limit restriction every one second
+ * must be started in another thread
+ * @author Arash
+ * @version 1.0.0
+ */
 public class SameTimeDL implements Runnable {
 
     private int currentDownloading;
@@ -35,6 +41,9 @@ public class SameTimeDL implements Runnable {
             }
         }
 
+    /**
+     * Calculates current number of downloading files
+     */
     public void numberOfCurrentDownloading(){
         currentDownloading = 0;
         for(Download download: JDMUI.getDownloads()){
@@ -43,6 +52,10 @@ public class SameTimeDL implements Runnable {
         }
     }
 
+    /**
+     *
+     * @return Same time download limit is regarded or not
+     */
     public boolean isLimited(){
         numberOfCurrentDownloading();
         if(currentDownloading <= SettingsFrame.getMaxDL() || currentDownloading == 0)
@@ -51,6 +64,10 @@ public class SameTimeDL implements Runnable {
             return false;
     }
 
+    /**
+     * Can start one of waiting tasks or not
+     * @return true or false
+     */
     public boolean canBeDownloaded(){
         numberOfCurrentDownloading();
         if(currentDownloading < SettingsFrame.getMaxDL() || currentDownloading == 0)

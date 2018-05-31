@@ -211,6 +211,9 @@ public class FileUnits {
         return 0;
     }
 
+    /**
+     * Initilizes queue after first start
+     */
     public static void initQueue(){
         for (int i = 0 ; i < JDMUI.getQueuedDownloads().size() ; i++){
             Download d = JDMUI.getQueuedDownloads().get(i);

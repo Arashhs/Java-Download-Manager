@@ -33,6 +33,10 @@ public class AboutWindow {
 
     }
 
+    /**
+     * Sets about window visible
+     * @param a visible or invisible
+     */
     public void setVisible(boolean a) {
         frame.pack();
         if (a) {

@@ -180,6 +180,10 @@ public class DownloadPanel {
         }
     }
 
+    /**
+     * Updates download's state
+     * @param d Download task
+     */
     public void updateDownloadState(Download d){
         downloadState.setText(d.getDownloadStatus() == 0 ? "Paused" : d.getDownloadStatus() == 1 ? "Downloading" : d.getDownloadStatus() == 2 ? "Completed" : "Waiting");
     }

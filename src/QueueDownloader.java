@@ -1,11 +1,19 @@
 import javax.swing.*;
 
+/**
+ * Runs a queue
+ * Implements Runnable
+ * @author Arash
+ * @version 1.0.0
+ */
 public class QueueDownloader implements Runnable {
 
     public QueueDownloader() {
     }
 
-
+    /**
+     * Starts queue (must be started in another thread)
+     */
     @Override
     public void run() {
         for(Download download: JDMUI.getQueuedDownloads()){
@@ -34,6 +42,11 @@ public class QueueDownloader implements Runnable {
        }
     }
 
+    /**
+     * Whether or not URL is filtered
+     * @param d download task
+     * @return true or false
+     */
     public boolean isFiltered(Download d){
         for(String string: FileUnits.loadFilteredURLs()){
             if(d.getUrl().contains(string))
