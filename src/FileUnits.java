@@ -1,6 +1,7 @@
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * File units class
@@ -9,10 +10,10 @@ import java.util.ArrayList;
  * @version 1.0.0
  */
 public class FileUnits {
-    private static ArrayList<java.lang.String> filteredURLs;
+    private static CopyOnWriteArrayList<String> filteredURLs;
 
     public FileUnits() {
-        filteredURLs = new ArrayList<>();
+        filteredURLs = new CopyOnWriteArrayList<String>();
         loadAllDownloads();
         loadQueue();
         initQueue();
@@ -129,7 +130,7 @@ public class FileUnits {
      * Loads filtered URLs
      * @return filtered URL's array
      */
-    public static ArrayList<String> loadFilteredURLs(){
+    public static CopyOnWriteArrayList<String> loadFilteredURLs(){
         try {
             filteredURLs.clear();
             FileReader reader = new FileReader("userdata\\filter.jdm");

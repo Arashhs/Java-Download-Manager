@@ -7,6 +7,7 @@ import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.Random;
 import java.net.*;
+import java.util.concurrent.Executor;
 
 
 /**
@@ -20,7 +21,7 @@ public class Download implements Serializable, Runnable {
     private long downloadedSize;
     private double progress;
     private long downloaded;
-    private int downloadStatus; //0: paused | 1: downloading | 2: Completed | 3: Waiting
+    private int downloadStatus; //0: paused | 1: downloading | 2: Completed | 3: Waiting (queue) | 4: Waiting (sametime Download Limit)
     private boolean isQueued; //false: not Queued | true: Queued
     private boolean isSelected;
     private boolean isCompleted;
@@ -82,73 +83,79 @@ public class Download implements Serializable, Runnable {
 
     public void downloadFile() throws IOException {
         downloadStatus = 1;
-        JDMUI.getDownloadPanelMap().get(this.url).updateDownloadState(this);
-        SettingsFrame settingsFrame = new SettingsFrame();
-        settingsFrame.dispose();
-        URL fileUrl = new URL(url);
-        HttpURLConnection httpConn = (HttpURLConnection) fileUrl.openConnection();
-        String byteRange = downloaded + "-" + downloadedSize;
-        httpConn.setRequestProperty("Range", "bytes=" + byteRange);
+        try {
+            JDMUI.getDownloadPanelMap().get(this.url).updateDownloadState(this);
+        } catch (Exception e) {
 
-        int responseCode = httpConn.getResponseCode();
+        } finally {
+
+            SettingsFrame settingsFrame = new SettingsFrame();
+            settingsFrame.dispose();
+            URL fileUrl = new URL(url);
+            HttpURLConnection httpConn = (HttpURLConnection) fileUrl.openConnection();
+            String byteRange = downloaded + "-" + downloadedSize;
+            httpConn.setRequestProperty("Range", "bytes=" + byteRange);
+
+            int responseCode = httpConn.getResponseCode();
 
 
-        // Check HTTP response code first
-        if (responseCode/100 == 2) {
-            String fileName = "";
-            String disposition = httpConn.getHeaderField("Content-Disposition");
-            String contentType = httpConn.getContentType();
-            int contentLength = httpConn.getContentLength();
+            // Check HTTP response code first
+            if (responseCode / 100 == 2) {
+                String fileName = "";
+                String disposition = httpConn.getHeaderField("Content-Disposition");
+                String contentType = httpConn.getContentType();
+                int contentLength = httpConn.getContentLength();
 
-            if (disposition != null) {
-                // extracts file name from header field
-                int index = disposition.indexOf("filename=");
-                if (index > 0) {
-                    fileName = disposition.substring(index + 10,
-                            disposition.length() - 1);
+                if (disposition != null) {
+                    // extracts file name from header field
+                    int index = disposition.indexOf("filename=");
+                    if (index > 0) {
+                        fileName = disposition.substring(index + 10,
+                                disposition.length() - 1);
+                    }
+                } else {
+                    // extracts file name from URL
+                    fileName = url.substring(url.lastIndexOf("/") + 1,
+                            url.length());
                 }
-            } else {
-                // extracts file name from URL
-                fileName = url.substring(url.lastIndexOf("/") + 1,
-                        url.length());
-            }
 
-            // opens input stream from the HTTP connection
-            InputStream inputStream = httpConn.getInputStream();
-         //   inputStream.skip(downloaded);
-            String saveFilePath = SettingsFrame.getDownloadDirectory() + File.separator + fileName;
+                // opens input stream from the HTTP connection
+                InputStream inputStream = httpConn.getInputStream();
+                //   inputStream.skip(downloaded);
+                String saveFilePath = SettingsFrame.getDownloadDirectory() + File.separator + fileName;
 
-            // opens an output stream to save into file
-            FileOutputStream outputStream = new FileOutputStream(saveFilePath,true);
+                // opens an output stream to save into file
+                FileOutputStream outputStream = new FileOutputStream(saveFilePath, true);
           /*  RandomAccessFile raf = new RandomAccessFile(saveFilePath,"rw");
             raf.seek(downloaded); */
 
-            int bytesRead = -1;
-            byte[] buffer = new byte[BUFFER_SIZE];
-            speedInKBps = 0.0D;
-            long startTime, endTime;
-            startTime = System.nanoTime();
-            int i = 1;
-            while ((downloadStatus==1) && (((startTime = System.nanoTime()))!=0) && ((bytesRead = inputStream.read(buffer)) != -1)) {
-                outputStream.write(buffer, 0, bytesRead);
-                downloaded += bytesRead;
-                JDMUI.getDownloadPanelMap().get(this.url).updateProgressBar(this,speedInKBps);
-                endTime = System.nanoTime();
-                if(i>=39) {
-                    speedInKBps = (bytesRead / 1024) / (((double) (endTime - startTime)) / 1000000000);
-                    i=1;
+                int bytesRead = -1;
+                byte[] buffer = new byte[BUFFER_SIZE];
+                speedInKBps = 0.0D;
+                long startTime, endTime;
+                startTime = System.nanoTime();
+                int i = 1;
+                while ((downloadStatus == 1) && (((startTime = System.nanoTime())) != 0) && ((bytesRead = inputStream.read(buffer)) != -1)) {
+                    outputStream.write(buffer, 0, bytesRead);
+                    downloaded += bytesRead;
+                    JDMUI.getDownloadPanelMap().get(this.url).updateProgressBar(this, speedInKBps);
+                    endTime = System.nanoTime();
+                    if (i >= 39) {
+                        speedInKBps = (bytesRead / 1024) / (((double) (endTime - startTime)) / 1000000000);
+                        i = 1;
+                    }
+                    i++;
                 }
-                i++;
-            }
-            outputStream.flush();
-            outputStream.close();
-            inputStream.close();
+                outputStream.flush();
+                outputStream.close();
+                inputStream.close();
 
-            System.out.println("File downloaded/paused");
-        } else {
-            System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+                System.out.println("File downloaded/paused");
+            } else {
+                System.out.println("No file to download. Server replied HTTP code: " + responseCode);
+            }
+            httpConn.disconnect();
         }
-        httpConn.disconnect();
     }
 
     @Override

@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * Setting's frame of program
@@ -17,10 +18,14 @@ public class SettingsFrame extends JDialog {
     private JPanel panel;
     private static String downloadDirectory;
     private static int lookAndFeel;
-    private static JTextArea textArea;
+    private JTextArea textArea;
     private static int maxDL;
+    private CopyOnWriteArrayList<String> filteredArray;
 
     public SettingsFrame() throws IOException {
+        filteredArray = new CopyOnWriteArrayList<String>();
+        for(String s: FileUnits.loadFilteredURLs())
+            filteredArray.add(s);
         FileUnits.loadSettings();
         setModalityType(DEFAULT_MODALITY_TYPE);
         if(downloadDirectory.equals(""))
@@ -151,8 +156,7 @@ public class SettingsFrame extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 textArea.validate();
-                System.out.println(SettingsFrame.textArea.getText());
-                FileUnits.saveFilteredURLs(SettingsFrame.textArea.getText());
+                FileUnits.saveFilteredURLs(textArea.getText());
                 FileUnits.saveSettings((Integer) spinner.getValue(),downloadDirectory,lookAndFeel);
             }
         });
@@ -176,7 +180,7 @@ public class SettingsFrame extends JDialog {
     }
 
     public void loadFilteredURLsToSettingsPanel(){
-        String filtered = String.join("\n",FileUnits.loadFilteredURLs());
+        String filtered = String.join("\n",filteredArray);
         textArea.setText(filtered);
     }
 

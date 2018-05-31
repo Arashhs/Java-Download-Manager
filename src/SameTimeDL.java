@@ -6,29 +6,29 @@ public class SameTimeDL implements Runnable {
     @Override
     public void run() {
         while (true) {
-            if(JDMUI.isIsQueueStarted()){
-                break;
-            }
+
             if(SettingsFrame.getMaxDL() != 0) {
                 if (canBeDownloaded()) {
                     for (int i = 0; i < JDMUI.getDownloads().size(); i++) {
-                        if (JDMUI.getDownloads().get(i).getDownloadStatus() == 3) {
+                        if (JDMUI.getDownloads().get(i).getDownloadStatus() == 4) {
                             JDMUI.getDownloads().get(i).setDownloadStatus(1);
                             Thread thread = new Thread(JDMUI.getDownloads().get(i));
                             thread.start();
                         }
                     }
-                    JDMUI.showCurrentList();
+                    //JDMUI.showCurrentList();
+                    JDMUI.revalidateFrame();
                 } else if (!isLimited()) {
                     for (int i = 0; i < JDMUI.getDownloads().size() && !isLimited(); i++) {
                         if (JDMUI.getDownloads().get(i).getDownloadStatus() == 1)
-                            JDMUI.getDownloads().get(i).setDownloadStatus(3);
+                            JDMUI.getDownloads().get(i).setDownloadStatus(4);
                     }
                     JDMUI.showCurrentList();
+                    JDMUI.revalidateFrame();
                 }
             }
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

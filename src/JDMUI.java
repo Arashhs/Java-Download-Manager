@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static java.awt.Component.LEFT_ALIGNMENT;
 import static java.awt.Dialog.DEFAULT_MODALITY_TYPE;
@@ -25,7 +26,7 @@ public class JDMUI {
     private static ArrayList<Download> searchResult;
     private static JTextField searchField;
     private static ArrayList<Download> sortedDownloads;
-    private static HashMap<String,DownloadPanel> downloadPanelMap;
+    private static ConcurrentHashMap<String,DownloadPanel> downloadPanelMap;
     private static boolean isDateSorted;
     private static boolean isNameSorted;
     private static boolean isSizeSorted;
@@ -48,7 +49,7 @@ public class JDMUI {
         queuedDownloads = new ArrayList<Download>();
         searchResult = new ArrayList<Download>();
         sortedDownloads = new ArrayList<Download>();
-        downloadPanelMap = new HashMap<String,DownloadPanel>();
+        downloadPanelMap = new ConcurrentHashMap<String,DownloadPanel>();
         frame = new JFrame("Java Download Manager V1.00");
         JPanel panel1 = new JPanel();
         SpringLayout layout1 = new SpringLayout();
@@ -271,6 +272,8 @@ public class JDMUI {
             completedButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    for(Download d: downloads)
+                        d.setSelected(false);
                     JDMUI.showCompletedList();
                 }
             });
@@ -1057,7 +1060,7 @@ public class JDMUI {
         downloadPanelMap.get(download.getUrl()).updateDownloadState(download);
     }
 
-    public static HashMap<String, DownloadPanel> getDownloadPanelMap() {
+    public static ConcurrentHashMap<String, DownloadPanel> getDownloadPanelMap() {
         return downloadPanelMap;
     }
 
@@ -1071,5 +1074,10 @@ public class JDMUI {
 
     public static boolean isIsQueueStarted() {
         return isQueueStarted;
+    }
+
+    public static void revalidateFrame(){
+        frame.revalidate();
+        frame.repaint();
     }
 }
