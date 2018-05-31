@@ -113,11 +113,12 @@ public class FileUnits {
     /**
      * Saves filtered URLs
      */
-    public static void saveFilteredURLs(){
+    public static void saveFilteredURLs(String filtered){
         try {
             FileWriter writer = new FileWriter("userdata\\filter.jdm");
             PrintWriter printWriter = new PrintWriter(writer);
-            printWriter.write(SettingsFrame.getTextArea().getText());
+            printWriter.write(filtered);
+            printWriter.flush();
             printWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

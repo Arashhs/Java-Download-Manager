@@ -31,12 +31,14 @@ public class JDMUI {
     private static boolean isSizeSorted;
     private static boolean isDescending;
     private static int currentList; //0: DownloadsList | 1: CompletedList | 2: QueuesList
+    private static boolean isQueueStarted;
 
     /**
      * constructor
      * @throws AWTException
      */
     public JDMUI() throws AWTException {
+        isQueueStarted = false;
         currentList = 0;
         isDateSorted = true;
         isNameSorted = false;
@@ -529,6 +531,7 @@ public class JDMUI {
         startQueue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                isQueueStarted = true;
                 Thread thread = new Thread(new QueueDownloader());
                 thread.start();
             }
@@ -537,6 +540,7 @@ public class JDMUI {
         stopQueue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                isQueueStarted = false;
                 for(Download download: JDMUI.getQueuedDownloads()){
                     download.setDownloadStatus(0);
                     JDMUI.getDownloadPanelMap().get(download.getUrl()).updateDownloadState(download);
@@ -645,7 +649,7 @@ public class JDMUI {
         currentList = 0;
         sort();
         panel5.removeAll();
-        downloadPanelMap.clear();
+     //   downloadPanelMap.clear();
         ((GridLayout) panel5.getLayout()).setRows(sortedDownloads.size());
         for(int i = sortedDownloads.size()-1 ; i>= 0 ; i--) {
             DownloadPanel panel = new DownloadPanel(sortedDownloads.get(i));
@@ -1065,4 +1069,7 @@ public class JDMUI {
         return false;
     }
 
+    public static boolean isIsQueueStarted() {
+        return isQueueStarted;
+    }
 }

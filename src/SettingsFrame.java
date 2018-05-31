@@ -150,7 +150,9 @@ public class SettingsFrame extends JDialog {
         button1.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FileUnits.saveFilteredURLs();
+                textArea.validate();
+                System.out.println(SettingsFrame.textArea.getText());
+                FileUnits.saveFilteredURLs(SettingsFrame.textArea.getText());
                 FileUnits.saveSettings((Integer) spinner.getValue(),downloadDirectory,lookAndFeel);
             }
         });
@@ -161,8 +163,12 @@ public class SettingsFrame extends JDialog {
         return downloadDirectory;
     }
 
-    public static JTextArea getTextArea() {
+    public JTextArea getTextArea() {
         return textArea;
+    }
+
+    public String textAreaText(){
+        return textArea.getText();
     }
 
     public void setTextArea(JTextArea textArea) {

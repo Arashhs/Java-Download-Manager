@@ -42,5 +42,7 @@ public class Main {
             System.err.print("Exception");
         }
         FileUnits fileUnits = new FileUnits();
+        Thread thread = new Thread(new SameTimeDL());
+        thread.start();
     }
 }

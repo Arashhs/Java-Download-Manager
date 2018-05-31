@@ -89,12 +89,12 @@ public class NewDownload extends JDialog {
 
     /**
      *
-     * @param URL URL of new download
+     * @param Url URL of new download
      * @return true: is filtered | false: is not filtered
      */
-    public boolean isFiltered(String URL){
+    public boolean isFiltered(String Url){
         for(String string: FileUnits.loadFilteredURLs()){
-            if(URL.contains(string))
+            if(Url.contains(string))
                 return true;
         }
         return false;
