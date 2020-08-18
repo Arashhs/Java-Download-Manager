@@ -1,4 +1,4 @@
 # Java-Download-Manager
-A simple java download manager with queue support - Named "JDM"
+JDM is a GUI Java Download Manager with queueing support.
 
-This project is my midterm project for Advanced Programming course!
+This is the Midterm Project of my Advanced Programming course.
